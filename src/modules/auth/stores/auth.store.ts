@@ -1,13 +1,15 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { AuthStatus, type User } from '../interfaces';
-import { loginAction } from '../actions';
+import { checkAuthAction, loginAction } from '../actions';
+import { useLocalStorage } from '@vueuse/core';
+import { registerAction } from '../actions/register.action';
 
 export const useAuthStore = defineStore('auth', () => {
   const authStatus = ref(AuthStatus.Checking);
   const user = ref<User | undefined>();
 
-  const token = ref('');
+  const token = ref(useLocalStorage('token', ''));
   const login = async (email: string, password: string) => {
     try {
       const loginResp = await loginAction(email, password);
@@ -26,6 +28,22 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
   };
+  const register = async(fullName: string, email: string, password: string) => {
+    try {
+      const registerResp = await registerAction(fullName, email, password);
+      if (!registerResp.ok) {
+        logout();
+        return {ok: false, message: registerResp.message};
+      }
+      user.value = registerResp.user;
+      token.value = registerResp.token;
+      authStatus.value = AuthStatus.Authenticated;
+
+      return {ok: true, user: registerResp.user};
+    } catch (error) {
+        return {ok: false, message: 'Error al registrar usuario'}
+    }
+  };
   const logout = () => {
     localStorage.removeItem('token')
 
@@ -33,6 +51,25 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = undefined;
     token.value = '';
     return false;
+  };
+
+  const checkAuthStatus = async (): Promise<boolean> => {
+    //authStatus.value = AuthStatus.Checking;
+    try {
+      const statusResp = await checkAuthAction();
+      if (!statusResp.ok) {
+        logout();
+        return false;
+      }
+      
+      authStatus.value = AuthStatus.Authenticated;
+      user.value = statusResp.user;
+      token.value = statusResp.token;
+      return true;
+    } catch (error) {
+      logout();
+        return false;
+    }
   };
 
   return {
@@ -45,9 +82,13 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated: computed(() => authStatus.value === AuthStatus.Authenticated),
 
     //Todo: getter para saber si es Admin o no
+    isAdmin : computed(() => user.value?.roles.includes('admin') ?? false),
     userName: computed(() => user.value?.fullName),
 
     //Actions
     login,
+    register,
+    checkAuthStatus,
+    logout,
   };
 });
