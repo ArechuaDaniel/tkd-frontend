@@ -83,7 +83,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     //Todo: getter para saber si es Admin o no
     isAdmin : computed(() => user.value?.roles.includes('admin') ?? false),
-    userName: computed(() => user.value?.fullName),
+    username: computed(() => user.value?.fullName),
 
     //Actions
     login,
