@@ -29,6 +29,10 @@ import ConfirmDialog from 'primevue/confirmdialog';
 //import VsToast from '@vuesimple/vs-toast'
 import { number } from 'yup';
 import { RouteNames } from '@/domain/utils/route.util';
+import { useAuthStore } from '@/modules/auth/stores/auth.store';
+import { Roles } from '@/domain/entities/Roles';
+
+const authStore = useAuthStore();
 
 const router = useRouter();
 
@@ -77,6 +81,10 @@ const alumnosModel = ref<Alumnos>({
 });
 
 onMounted(async () => {
+  if (authStore.user?.roles === Roles.ASOCIACION) {
+		window.location.href = '/admin/dashboard'
+		return;
+	}
   isLoading.value = true;
   loadedClubs.value = await triggerGetAllClubs();
   isLoading.value = false;
@@ -102,7 +110,7 @@ onMounted(async () => {
 // };
 const querySucursals = async () => {
   isLoadingSucursales.value = true;
-  loadedSucursales.value = await triggerGetAllSucursals(Number(alumnosModel.value.idClub));
+  loadedSucursales.value = await triggerGetAllSucursals();
   isLoadingSucursales.value = false;
 };
 const reassembleModel = async () => {

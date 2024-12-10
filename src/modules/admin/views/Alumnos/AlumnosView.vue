@@ -8,14 +8,17 @@ import Dropdown from 'primevue/dropdown';
 import { useRouter } from 'vue-router';
 import { RouteNames } from '@/domain/utils/route.util';
 
+import { Roles } from '@/domain/entities/Roles';
+import { useAuthStore } from '@/modules/auth/stores/auth.store';
+
+const authStore = useAuthStore();
 const router = useRouter();
-const loadedAlumnos = ref<Alumnos[]>([]);
+const loadedAlumnos = ref<Alumnos[] | null>([]);
 const isLoading = ref(false);
 
 onMounted(async () => {
   isLoading.value = true;
   loadedAlumnos.value = await triggerGetAllAlumnos();
-
   isLoading.value = false;
 });
 const filters = ref({
@@ -24,6 +27,9 @@ const filters = ref({
   primerNombre: { value: null, matchMode: FilterMatchMode.CONTAINS },
   primerApellido: { value: null, matchMode: FilterMatchMode.CONTAINS },
   genero: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'sucursals.nombreSucursal': { value: null, matchMode: FilterMatchMode.CONTAINS },
+  idClub: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'clubs.nombreClub': { value: null, matchMode: FilterMatchMode.CONTAINS },
   //centrocos: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
 });
 const calcularEdad = (fechaNacimiento: any) => {
@@ -46,6 +52,11 @@ const calcularEdad = (fechaNacimiento: any) => {
   <div class="flex justify-end items-end">
     <label for="" class="w-full">&nbsp;</label>
     <RouterLink
+    v-if="
+        [Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR, Roles.CLUB].includes(
+          authStore.user?.roles as Roles,
+        )
+      "
       v-tooltip="'Añadir un nuevo alumno'"
       class="min-w-[100px] bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-400"
       :to="{ name: RouteNames.addAlumnosView }"
@@ -54,7 +65,8 @@ const calcularEdad = (fechaNacimiento: any) => {
       <i class="pi pi-plus"></i>&nbsp; Agregar
     </RouterLink>
   </div>
-  <DataTable
+  <div class="overflow-x-auto w-full">
+    <DataTable
     :value="loadedAlumnos"
     stripedRows
     :loading="isLoading"
@@ -65,18 +77,20 @@ const calcularEdad = (fechaNacimiento: any) => {
     v-model:filters="filters"
     v-model:selection="filters"
   >
-    <Column field="id" header="Acción">
+    <Column field="id" header="Acción"
+      v-if="[Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR, Roles.CLUB].includes(authStore.user?.roles as Roles,)"
+    >
       <template #body="slotProps">
         <RouterLink
-        :to="'/admin/alumnos/editar-alumno/' +slotProps.data.id"
-        :class="[
-          'bg-transparent border-blue-900 border-2 text-blue-900 py-1 px-2',
-          'rounded-lg flex flex-row w-fit hover:bg-blue-900 hover:text-white mr-2',
-        ]"
-        v-tooltip="'Editar alumno'"
-      >
-        <i class="pi pi-pencil"></i>
-      </RouterLink>
+          :to="'/admin/alumnos/editar-alumno/' + slotProps.data.id"
+          :class="[
+            'bg-transparent border-blue-900 border-2 text-blue-900 py-1 px-2',
+            'rounded-lg flex flex-row w-fit hover:bg-blue-900 hover:text-white mr-2',
+          ]"
+          v-tooltip="'Editar alumno'"
+          >
+          <i class="pi pi-pencil"></i>
+        </RouterLink>
       </template>
     </Column>
     <Column field="cedulaAlumno" header="Cédula" sortable :showFilterMenu="false">
@@ -87,7 +101,7 @@ const calcularEdad = (fechaNacimiento: any) => {
           @input="filterCallback()"
           class="p-column-filter w-28"
           placeholder="Buscar"
-        />
+          />
       </template>
     </Column>
     <Column field="primerNombre" header="Nombre" sortable :showFilterMenu="false">
@@ -98,18 +112,18 @@ const calcularEdad = (fechaNacimiento: any) => {
           @input="filterCallback()"
           class="p-column-filter w-28"
           placeholder="Buscar"
-        />
+          />
       </template>
     </Column>
     <Column field="primerApellido" header="Apellido" sortable :showFilterMenu="false">
       <template #filter="{ filterModel, filterCallback }">
         <InputText
-          type="text"
+        type="text"
           v-model="filterModel.value"
           @input="filterCallback()"
           class="p-column-filter w-28"
           placeholder="Buscar"
-        />
+          />
       </template>
     </Column>
     <Column field="fechaIngreso" header="Fecha Ingreso">
@@ -125,12 +139,38 @@ const calcularEdad = (fechaNacimiento: any) => {
     <Column field="genero" header="Género" sortable :showFilterMenu="false">
       <template #filter="{ filterModel, filterCallback }">
         <Dropdown
+        v-model="filterModel.value"
+        @change="filterCallback()"
+        :options="['masculino', 'femenino', 'otro']"
+        :showClear="true"
+        placeholder="Seleccione"
+        class="p-column-filter capitalize"
+        >
+        <template #option="slotProps">
+          <Tag :value="slotProps.option" />
+        </template>
+      </Dropdown>
+    </template>
+    <template #body="slotProps">
+        <p class="capitalize">
+          {{ slotProps.data.genero }}
+        </p>
+      </template>
+    </Column>
+    <Column field="clubs.nombreClub" header="Club" sortable :showFilterMenu="false">
+      <template #filter="{ filterModel, filterCallback }">
+        <Dropdown
+          v-if="[Roles.ADMIN, Roles.ASOCIACION].includes(authStore.user?.roles as Roles)"
           v-model="filterModel.value"
           @change="filterCallback()"
-          :options="['masculino', 'femenino', 'otro']"
+          :options="
+            loadedAlumnos
+              ?.map((x) => x.clubs?.nombreClub || '')
+              .filter((value, index, self) => value && self.indexOf(value) === index) || []
+          "
           :showClear="true"
           placeholder="Seleccione"
-          class="p-column-filter capitalize"
+          class="p-column-filter"
         >
           <template #option="slotProps">
             <Tag :value="slotProps.option" />
@@ -139,9 +179,41 @@ const calcularEdad = (fechaNacimiento: any) => {
       </template>
       <template #body="slotProps">
         <p class="capitalize">
-          {{ slotProps.data.genero }}
+          {{ slotProps.data.clubs?.nombreClub || 'Sin Club' }}
+        </p>
+      </template>
+    </Column>
+    <Column
+    field="sucursals.nombreSucursal"
+    header="Sucursal"
+    sortable
+    :showFilterMenu="false"
+    v-if="[Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR, Roles.CLUB].includes(authStore.user?.roles as Roles,)">
+    <template #filter="{ filterModel, filterCallback }">
+        <Dropdown
+          v-if="[Roles.ADMIN, Roles.CLUB].includes(authStore.user?.roles as Roles,)"
+          v-model="filterModel.value"
+          @change="filterCallback()"
+          :options="
+            loadedAlumnos
+              ?.map((x) => x.sucursals?.nombreSucursal || '')
+              .filter((value, index, self) => value && self.indexOf(value) === index) || []
+          "
+          :showClear="true"
+          placeholder="Seleccione"
+          class="p-column-filter"
+        >
+          <template #option="slotProps">
+            <Tag :value="slotProps.option" />
+          </template>
+        </Dropdown>
+      </template>
+      <template #body="slotProps">
+        <p class="capitalize">
+          {{ slotProps.data.sucursals?.nombreSucursal || 'Sin Sucursal' }}
         </p>
       </template>
     </Column>
   </DataTable>
+</div>
 </template>

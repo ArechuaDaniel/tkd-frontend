@@ -147,6 +147,7 @@ const statusOptions = ref([
           <div class="flex flex-col items-start">
             <label for="nombreClub" class="block text-gray-600">Nombre Club</label>
             <InputText
+              :disabled="(authStore.user?.roles === Roles.ASOCIACION) && !!idClub"
               v-model="clubModel.nombreClub"
               type="text"
               id="nombreClub"
@@ -158,6 +159,7 @@ const statusOptions = ref([
           <div class="flex flex-col items-start">
             <label for="siglas" class="block text-gray-600">Siglas</label>
             <InputText
+              :disabled="(authStore.user?.roles === Roles.ASOCIACION) && !!idClub"
               v-model="clubModel.siglas"
               type="text"
               id="siglas"
@@ -169,6 +171,7 @@ const statusOptions = ref([
           <div class="flex flex-col items-start">
             <label for="director" class="block text-gray-600">Director</label>
             <InputText
+              :disabled="(authStore.user?.roles === Roles.ASOCIACION) && !!idClub"
               v-model="clubModel.director"
               type="text"
               id="director"
@@ -181,6 +184,7 @@ const statusOptions = ref([
           <div class="flex flex-col items-start">
             <label for="telefono" class="block text-gray-600">Teléfono</label>
             <InputText
+              :disabled="(authStore.user?.roles === Roles.ASOCIACION) && !!idClub"
               v-model="clubModel.telefono"
               type="text"
               id="telefono"
@@ -195,6 +199,7 @@ const statusOptions = ref([
           <div class="flex flex-col items-start">
             <label class="block text-gray-600" for="Direccion">Dirección</label>
             <InputText
+              :disabled="(authStore.user?.roles === Roles.ASOCIACION) && !!idClub"
               v-model="clubModel.direccion"
               id="direccion"
               name="direccion"
@@ -207,6 +212,7 @@ const statusOptions = ref([
           <div class="flex flex-col items-start">
             <label for="fechaAfiliacion" class="block text-gray-600">Fecha Afiliación</label>
             <DatePicker
+              :disabled="(authStore.user?.roles === Roles.ASOCIACION) && !!idClub"
               showIcon
               fluid
               :showOnFocus="false"
@@ -219,6 +225,7 @@ const statusOptions = ref([
           <div class="flex flex-col items-start">
             <label for="isActive" class="block text-gray-600">Asociación</label>
             <Dropdown
+              :disabled="(authStore.user?.roles === Roles.ASOCIACION) && !!idClub"
               v-model="clubModel.idAsociacion"
               ref="fullNameInputRef"
               type="text"
@@ -235,6 +242,7 @@ const statusOptions = ref([
           <div class="flex flex-col items-start">
             <label for="isActive" class="block text-gray-600">Active</label>
             <Dropdown
+              :disabled="(authStore.user?.roles === Roles.CLUB) && !!idClub"
               v-model="clubModel.isActive"
               ref="fullNameInputRef"
               type="text"

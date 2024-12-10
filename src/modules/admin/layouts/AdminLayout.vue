@@ -15,7 +15,7 @@ const { user } = storeToRefs(useAuthStore());
 const props = defineProps({
 	activeMenu: {
 		type: String,
-		default: RouteNames.home
+		//default: RouteNames.home
 	}
 });
 type Option = {
@@ -34,21 +34,21 @@ const menuOptions: Option[] = [
 	},
     {
 		text: "Asociación",
-		icon: "pi pi-users mr-2 text-cyan-500",
+		icon: "pi pi-warehouse mr-2 text-cyan-500",
 		link: RouteNames.asociacionView,
-		roles: [Roles.ADMIN,Roles.ASOCIACION],
+		roles: [Roles.ADMIN],
 	},
     {
 		text: "Club",
-		icon: "pi pi-users mr-2 text-cyan-500",
+		icon: "pi pi-warehouse mr-2 text-cyan-500",
 		link: RouteNames.clubView,
-		roles: [Roles.ADMIN,Roles.ASOCIACION, Roles.CLUB],
+		roles: [Roles.ADMIN,Roles.ASOCIACION],
 	},
     {
 		text: "Sucursal",
-		icon: "pi pi-users mr-2 text-cyan-500",
+		icon: "pi pi-warehouse mr-2 text-cyan-500",
 		link: RouteNames.sucursalView,
-		roles: [Roles.ADMIN,Roles.CLUB, Roles.SUCURSAL, Roles.INSTRUCTOR],
+		roles: [Roles.ADMIN,Roles.CLUB],
 	},
     {
 		text: "Alumnos",
@@ -56,6 +56,21 @@ const menuOptions: Option[] = [
 		link: RouteNames.alumnosView,
 		roles: [Roles.ADMIN,Roles.ASOCIACION, Roles.CLUB, Roles.SUCURSAL, Roles.INSTRUCTOR],
 	},
+    {
+		text: "Horarios",
+		icon: "pi pi-clock mr-2 text-cyan-500",
+		link: RouteNames.alumnosView,
+		roles: [Roles.ADMIN,Roles.ASOCIACION, Roles.CLUB, Roles.SUCURSAL, Roles.INSTRUCTOR],
+	},
+];
+const settingOptions: Option[] = [
+	{
+		text: "Perfil",
+		icon: "pi pi-home mr-2 text-cyan-500",
+		link: RouteNames.home,
+		roles: [Roles.ADMIN,Roles.ASOCIACION, Roles.CLUB, Roles.SUCURSAL, Roles.INSTRUCTOR],
+	},
+    
 ];
 const confirm = useConfirm();
 const toast = useToast();
@@ -97,10 +112,13 @@ const cerrarSesion = async () => {
   <Toast />
   <ConfirmDialog class="w-96"></ConfirmDialog>
   <div class="min-h-screen flex relative lg:static bg-surface-50 dark:bg-surface-950">
-      <div id="app-sidebar-11" class="w-[280px] bg-gray-300 dark:bg-surface-950 h-screen hidden lg:block flex-shrink-0 absolute lg:static left-0 top-0 z-10 border-r border-surface select-none">
+      <div id="app-sidebar-11" class="w-[280px] bg-gray-800 dark:bg-surface-950 h-screen hidden lg:block flex-shrink-0 absolute lg:static left-0 top-0 z-10 border-r border-surface select-none">
           <div class="flex flex-col h-full">
               <div class="flex items-center px-8 flex-shrink-0 h-[60px]">
-                <div class="text-white dark:text-surface-0 font-medium bg-gray-800 p-4 rounded-xl">
+                <div class="flex flex-row text-white dark:text-surface-0 font-medium  rounded-xl">
+                    <span class="material-symbols-outlined">
+                        sports_gymnastics
+                    </span>
                   <h1>SISTEMA TAEKWONDO</h1>
                 </div>
               </div>
@@ -117,13 +135,13 @@ const cerrarSesion = async () => {
                               }"
                               class="p-4 flex items-center justify-between text-surface-600 dark:text-surface-200 cursor-pointer border-2 border-transparent border-rounded"
                           >
-                              <span class="font-medium">APLICACIÓN</span>
-                              <i class="pi pi-chevron-down" />
+                              <span class="font-medium text-white">APLICACIÓN</span>
+                              <i class="pi pi-chevron-down text-white" />
                           </div>
                           <ul class="list-none p-0 m-0 overflow-hidden" v-for="option in menuOptions"   >
                                 <li v-if="option.roles.includes(authStore.user!.roles as Roles)"  :key="option.text">
                                     <SidebarButton
-                                        :class="'rounded-xl flex items-center cursor-pointer p-4  dark:text-surface-100 border-2 border-transparent hover:bg-gray-700 hover:border-gray-700 dark:hover:border-surface-500 duration-150 transition-colors' + (option.link === router.currentRoute.value.name ? ' bg-gray-600 border-gray-600 dark:border-surface-500' : '')"
+                                        :class="'rounded-xl flex items-center cursor-pointer p-4 text-white  dark:text-surface-100 border-2 border-transparent hover:bg-gray-700 hover:border-gray-700 dark:hover:border-surface-500 duration-150 transition-colors' + (option.link === router.currentRoute.value.name ? ' bg-gray-600 border-gray-600 dark:border-surface-500' : '')"
                                         @click="router.push({ name: option.link })"
                                         :active="props.activeMenu === option.link"
                                         :text="option.text"
@@ -149,37 +167,36 @@ const cerrarSesion = async () => {
                                     leaveToClass: 'hidden',
                                     leaveActiveClass: 'animate-slideup'
                                 }"
-                                class="p-4 flex items-center justify-between text-surface-600 dark:text-surface-200 cursor-pointer"
+                                class="p-4 flex items-center justify-between text-white dark:text-surface-200 cursor-pointer"
                             >
                                 <span class="font-medium">CONFIGURACIÓN</span>
                                 <i class="pi pi-chevron-down" />
                             </div>
+                            <ul class="list-none p-0 m-0 overflow-hidden" v-for="option in settingOptions"   >
+                                <li v-if="option.roles.includes(authStore.user!.roles as Roles)"  :key="option.text">
+                                    <SidebarButton
+                                        :class="'rounded-xl flex items-center cursor-pointer p-4 text-white  dark:text-surface-100 border-2 border-transparent hover:bg-gray-700 hover:border-gray-700 dark:hover:border-surface-500 duration-150 transition-colors' + (option.link === router.currentRoute.value.name ? ' bg-gray-600 border-gray-600 dark:border-surface-500' : '')"
+                                        @click="router.push({ name: option.link })"
+                                        :active="props.activeMenu === option.link"
+                                        :text="option.text"
+                                        :icon="option.icon"
+                                    >
+                                        <!-- <i :class="[option.icon]" />
+                                        <span class="font-medium">{{ option.text }}</span> -->
+                                    </SidebarButton>
+                                </li>
+                          </ul>
                             <ul class="list-none p-0 m-0 overflow-hidden">
                                 <li>
                                     <button
                                         @click="cerrarSesion()"
-                                        class="rounded-xl flex items-center cursor-pointer p-4 border-2 border-transparent hover:border-surface-300 dark:hover:border-surface-500 text-surface-700 dark:text-surface-100 duration-150 transition-colors"
+                                        class="rounded-xl flex items-center cursor-pointer p-4 border-2 border-transparent hover:border-surface-300 dark:hover:border-surface-500 text-white dark:text-surface-100 duration-150 transition-colors"
                                     >
-                                        <i class="pi pi-discord mr-2 text-cyan-500" />
+                                        <i class="pi pi-sign-out mr-2 text-cyan-500" />
                                         <span class="font-medium">Cerrar Sesión</span>
                                     </button>
                                 </li>
-                                <li>
-                                    <a
-                                        class="rounded-xl flex items-center cursor-pointer p-4 border-2 border-transparent hover:border-surface-300 dark:hover:border-surface-500 text-surface-700 dark:text-surface-100 duration-150 transition-colors"
-                                    >
-                                        <i class="pi pi-slack mr-2 text-purple-500" />
-                                        <span class="font-medium">Slack</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        class="rounded-xl flex items-center cursor-pointer p-4 border-2 border-transparent hover:border-surface-300 dark:hover:border-surface-500 text-surface-700 dark:text-surface-100 duration-150 transition-colors"
-                                    >
-                                        <i class="pi pi-github mr-2 text-blue-500" />
-                                        <span class="font-medium">GitHub</span>
-                                    </a>
-                                </li>
+                                
                             </ul>
                         </li>
                     </ul>
@@ -188,7 +205,7 @@ const cerrarSesion = async () => {
               <div class="mt-auto">
                   <hr class="mb-4 mx-4 border-t border-0 border-surface" />
                   <div
-                      class="rounded-xl m-4 flex items-center cursor-pointer p-4 text-surface-700 dark:text-surface-100 border-2 border-transparent hover:border-surface-300 dark:hover:border-surface-500 duration-150 transition-colors bg-blue-500"
+                      class="rounded-xl m-4 flex items-center cursor-pointer p-4 text-surface-700 dark:text-surface-100 border-2 border-transparent hover:border-surface-300 dark:hover:border-surface-500 duration-150 transition-colors "
                   >
                       <img src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/render/image/public/block.images/blocks/avatars/circle/avatar-f-1.png" class="mr-2 w-7 h-7" />
                       <div class="flex flex-col  justify-center ">
@@ -200,7 +217,7 @@ const cerrarSesion = async () => {
       </div>
 
       <div class="min-h-screen flex flex-col relative flex-auto ">
-          <div class="h-[60px] flex justify-between items-center px-8 bg-gray-300 dark:bg-surface-950 border-b border-surface relative lg:static">
+          <div class="h-[60px] flex justify-between items-center px-8 bg-gray-800 dark:bg-surface-950 border-b border-surface relative lg:static">
               <a
                   v-styleclass="{
                       selector: '#app-sidebar-11',

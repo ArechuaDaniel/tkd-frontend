@@ -17,10 +17,10 @@ export interface Sucursals {
 }
 
 export const triggerGetAllSucursals = async (
-  idClub: number
+  
 ): Promise<Sucursals[]> => {
   const output = await makeRequest<any>(
-    `${VITE_APP_API_URL}/sucursal?idClub=${idClub}`
+    `${VITE_APP_API_URL}/sucursal`
   )
   return output ?? []
 }

@@ -18,13 +18,12 @@ const loadedSucursal = ref<Sucursals[]>([]);
 const isLoading = ref(false);
 
 onMounted(async () => {
-  if (authStore.user?.roles === Roles.ASOCIACION ) {
+  if (authStore.user?.roles === Roles.ASOCIACION || authStore.user?.roles === Roles.INSTRUCTOR ) {
 		window.location.href = '/admin/dashboard'
 		return;
 	}
   isLoading.value = true;
-  // TODO: agrgar id club de la sesion
-  loadedSucursal.value = await triggerGetAllSucursals(1);;
+  loadedSucursal.value = await triggerGetAllSucursals();;
 
   isLoading.value = false;
 });

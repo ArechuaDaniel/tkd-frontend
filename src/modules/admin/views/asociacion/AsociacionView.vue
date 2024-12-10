@@ -16,7 +16,7 @@ const loadedAsociaciones = ref<Asociacion[]>([]);
 const isLoading = ref(false);
 
 onMounted(async () => {
-  if (authStore.user?.roles === Roles.CLUB || authStore.user?.roles === Roles.SUCURSAL || authStore.user?.roles === Roles.INSTRUCTOR ) {
+  if (authStore.user?.roles === Roles.CLUB || authStore.user?.roles === Roles.SUCURSAL || authStore.user?.roles === Roles.INSTRUCTOR || authStore.user?.roles === Roles.ASOCIACION ) {
 		window.location.href = '/admin/dashboard'
 		return;
 	}

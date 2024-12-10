@@ -1,6 +1,8 @@
 //import { makeRequest } from '@/domain/utils/network.util'
 
 import { makeRequest } from "@/domain/utils/network.util"
+import type { Clubs } from "./club"
+import type { Sucursals } from "./sucursal";
 
 const { VITE_APP_API_URL } = import.meta.env
 
@@ -22,16 +24,39 @@ export interface Alumnos {
   genero?: string,
   tipoSangre?: string,
   ocupacion?: string,
+  clubs?: any,
+  sucursals?: any,
 }
 
-export const triggerGetAllAlumnos = async (
+// export const triggerGetAllAlumnos = async (
   
-): Promise<Alumnos[]> => {
-  const output = await makeRequest<any>(
-    `${VITE_APP_API_URL}/alumnos`
-  )
-  return output ?? []
-}
+// ): Promise<Alumnos[] | null> => {
+//   const output = await makeRequest<any>(
+//     `${VITE_APP_API_URL}/alumnos`
+//   )
+//   return output  ? {...output , clubs: output.clubs} : [] 
+// }
+export const triggerGetAllAlumnos = async (): Promise<Alumnos[] | null> => {
+  try {
+    const output = await makeRequest<Alumnos[]>(
+      `${VITE_APP_API_URL}/alumnos`
+    );
+    if (!output || !Array.isArray(output)) {
+      console.error("Respuesta inesperada de la API", output);
+      return null;
+    }
+
+    // Devuelve directamente la lista de alumnos si es válida.
+    return output.map((alumno) => ({
+      ...alumno,
+      clubs: alumno.clubs || [], // Asegura que `clubs` siempre sea un array.
+      sucursals: alumno.sucursals || [],
+    }));
+  } catch (error) {
+    console.error("Error obteniendo alumnos", error);
+    return null;
+  }
+};
 export const triggerGetAlumnoById = async (
   id: number
 ): Promise<Alumnos|null> => {
