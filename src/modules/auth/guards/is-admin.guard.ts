@@ -11,7 +11,8 @@ const isAdminGuard = async (
   // console.log(to);
   await authStore.checkAuthStatus();
 
-  authStore.isAdmin ? next() : next({ name: 'home' }) ;
+  (authStore.isAdmin || authStore.isClub || authStore.isSucursal || authStore.isAsociacion || authStore.isInstructor ) ? next() : next({ name: 'home' }) ;
+  //authStore.isClub  ? next() : next({ name: 'home' }) ;
 };
 
 export default isAdminGuard;

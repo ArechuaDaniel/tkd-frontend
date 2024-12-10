@@ -83,7 +83,11 @@ export const useAuthStore = defineStore('auth', () => {
 
     //Todo: getter para saber si es Admin o no
     isAdmin : computed(() => user.value?.roles.includes('admin') ?? false),
-    username: computed(() => user.value?.fullName),
+    isClub : computed(() => user.value?.roles.includes('club') ?? false),
+    isSucursal: computed(() => user.value?.roles.includes('sucursal') ?? false),
+    isAsociacion: computed(() => user.value?.roles.includes('asociacion') ?? false),
+    isInstructor: computed(() => user.value?.roles.includes('instructor') ?? false),
+    username: computed(() => user.value?.primerNombre),
 
     //Actions
     login,

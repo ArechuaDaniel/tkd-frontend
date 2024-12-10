@@ -1,5 +1,6 @@
 import type { RouteRecordRaw } from "vue-router"
 import isNotAuthenticatedGuard from "../guards/is-not-authenticated.guard"
+import { RouteNames } from "@/domain/utils/route.util"
 
 
 export const authRoutes : RouteRecordRaw = {
@@ -11,7 +12,8 @@ export const authRoutes : RouteRecordRaw = {
     children:[
         {
             path: 'login',
-            name: 'login',
+            //name: 'login',
+            name: RouteNames.login,
             component: () => import('@/modules/auth/views/LoginView.vue'),
         },
         {

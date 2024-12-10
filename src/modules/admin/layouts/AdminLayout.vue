@@ -1,293 +1,251 @@
-<template>
-  <!-- component -->
-  <div class="flex w-screen h-screen text-gray-700">
-    <!-- Component Start -->
-    <div class="flex flex-col items-center w-16 pb-4 overflow-auto border-r border-gray-300">
-      <a class="flex items-center justify-center flex-shrink-0 w-full h-16 bg-gray-300" href="#">
-        <svg
-          class="w-8 h-8"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-          />
-        </svg>
-      </a>
-      <a
-        class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300"
-        href="#"
-      >
-        <svg
-          class="w-5 h-5"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-          />
-        </svg>
-      </a>
-      <a
-        class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300"
-        href="#"
-      >
-        <svg
-          class="w-5 h-5"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-          />
-        </svg>
-      </a>
-      <a
-        class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300"
-        href="#"
-      >
-        <svg
-          class="w-5 h-5"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-          />
-        </svg>
-      </a>
-      <a
-        class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300"
-        href="#"
-      >
-        <svg
-          class="w-5 h-5"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-          />
-        </svg>
-      </a>
-      <a
-        class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300"
-        href="#"
-      >
-        <svg
-          class="w-5 h-5"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-          />
-        </svg>
-      </a>
-      <a
-        class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 mt-auto rounded hover:bg-gray-300"
-        href="#"
-      >
-        <svg
-          class="w-5 h-5"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-      </a>
-    </div>
-    <div class="flex flex-col w-56 border-r border-gray-300">
-      <button class="relative text-sm focus:outline-none group">
-        <div
-          class="flex items-center justify-between w-full h-16 px-4 border-b border-gray-300 hover:bg-gray-300"
-        >
-          <span class="font-medium"> Dropdown </span>
-          <svg
-            class="w-4 h-4"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </div>
-        <div
-          class="absolute z-10 flex-col items-start hidden w-full pb-1 bg-white shadow-lg group-focus:flex"
-        >
-          <a class="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
-          <a class="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
-          <a class="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
-        </div>
-      </button>
-      <div class="flex flex-col flex-grow p-4 overflow-auto">
-        <RouterLink
-          to="/admin"
-          class="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300"
-        >
-          <span class="leading-none">Dashboard </span>
-        </RouterLink>
-        <RouterLink
-          to="/admin/products"
-          class="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300"
-        >
-          <span class="leading-none">Productos </span>
-        </RouterLink>
-        <a
-          class="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300"
-          href="#"
-        >
-          <span class="leading-none">Item 3</span>
-        </a>
-        <a
-          class="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300"
-          href="#"
-        >
-          <span class="leading-none">Item 4</span>
-        </a>
-        <a
-          class="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300"
-          href="#"
-        >
-          <span class="leading-none">Item 5</span>
-        </a>
-        <a
-          class="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300"
-          href="#"
-        >
-          <span class="leading-none">Item 6</span>
-        </a>
-        <a
-          class="flex items-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium bg-blue-500 text-white rounded hover:bg-blue-700"
-          href="#"
-        >
-          <svg
-            class="w-5 h-5"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-            />
-          </svg>
-          <span class="ml-2 leading-none">Nuevo</span>
-        </a>
-      </div>
-    </div>
-    <div class="flex flex-col flex-grow">
-      <div class="flex items-center flex-shrink-0 h-16 px-8 border-b border-gray-300">
-        <h1 class="text-lg font-medium">{{username}}</h1>
-        <button
-          class="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium rounded hover:bg-gray-300"
-        >
-          Action 1
-        </button>
-        <button
-          class="flex items-center justify-center h-10 px-4 ml-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300"
-        >
-          Action 2
-        </button>
-        <button class="relative ml-2 text-sm focus:outline-none group">
-          <div class="flex items-center justify-between w-10 h-10 rounded hover:bg-gray-300">
-            <svg
-              class="w-5 h-5 mx-auto"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-              />
-            </svg>
-          </div>
-          <div
-            class="absolute right-0 flex-col items-start hidden w-40 pb-1 bg-white border border-gray-300 shadow-lg group-focus:flex"
-          >
-            <a class="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
-            <a class="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
-            <a class="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
-          </div>
-        </button>
-      </div>
-      <div class="flex-grow p-6 overflow-auto bg-gray-200">
-        <RouterView />
-      </div>
-    </div>
-    <!-- Component End  -->
-  </div>
-
-  <a
-    class="fixed flex items-center justify-center h-8 pr-2 pl-1 bg-blue-600 rounded-full bottom-0 right-0 mr-4 mb-4 shadow-lg text-blue-100 hover:bg-blue-600"
-    href="https://twitter.com/lofiui"
-    target="_top"
-  >
-    <div class="flex items-center justify-center h-6 w-6 bg-blue-500 rounded-full">
-      <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
-        <g>
-          <path
-            d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"
-          ></path>
-        </g>
-      </svg>
-    </div>
-    <span class="text-sm ml-1 leading-none">@lofiui</span>
-  </a>
-</template>
 <script setup lang="ts">
+import OverlayBadge from 'primevue/overlaybadge';
 import { useAuthStore } from '@/modules/auth/stores/auth.store';
 import { storeToRefs } from 'pinia';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
+import { Roles } from '@/domain/entities/Roles';
+import { RouteNames } from '@/domain/utils/route.util';
+import SidebarButton from './SidebarButton.vue';
+import { ConfirmDialog, Toast, useConfirm, useToast } from 'primevue';
+import { ref } from 'vue';
 
-const { username } = storeToRefs(useAuthStore());
+const authStore = useAuthStore();
+const router = useRouter();
+const { user } = storeToRefs(useAuthStore());
+const props = defineProps({
+	activeMenu: {
+		type: String,
+		default: RouteNames.home
+	}
+});
+type Option = {
+	text: string,
+	icon: string,
+	link: string,
+	roles: Roles[]
+}
 
+const menuOptions: Option[] = [
+	{
+		text: "Dashboard",
+		icon: "pi pi-home mr-2 text-cyan-500",
+		link: RouteNames.home,
+		roles: [Roles.ADMIN,Roles.ASOCIACION, Roles.CLUB, Roles.SUCURSAL, Roles.INSTRUCTOR],
+	},
+    {
+		text: "Asociación",
+		icon: "pi pi-users mr-2 text-cyan-500",
+		link: RouteNames.asociacionView,
+		roles: [Roles.ADMIN,Roles.ASOCIACION],
+	},
+    {
+		text: "Club",
+		icon: "pi pi-users mr-2 text-cyan-500",
+		link: RouteNames.clubView,
+		roles: [Roles.ADMIN,Roles.ASOCIACION, Roles.CLUB],
+	},
+    {
+		text: "Sucursal",
+		icon: "pi pi-users mr-2 text-cyan-500",
+		link: RouteNames.sucursalView,
+		roles: [Roles.ADMIN,Roles.CLUB, Roles.SUCURSAL, Roles.INSTRUCTOR],
+	},
+    {
+		text: "Alumnos",
+		icon: "pi pi-users mr-2 text-cyan-500",
+		link: RouteNames.alumnosView,
+		roles: [Roles.ADMIN,Roles.ASOCIACION, Roles.CLUB, Roles.SUCURSAL, Roles.INSTRUCTOR],
+	},
+];
+const confirm = useConfirm();
+const toast = useToast();
+const isLoading = ref(false)
+
+const cerrarSesion = async () => {
+ 
+  confirm.require({
+    message: 'Desea cerrar sesión?',
+    header: 'Cerrar Sesión',
+    icon: 'pi pi-info-circle',
+    rejectLabel: 'Cancel',
+    rejectProps: {
+      label: 'Cancelar',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Aceptar',
+      severity: 'Cancelar',
+    },
+    accept: async () => {
+      isLoading.value = true;
+      toast.add({
+          severity: 'info',
+          summary: 'Confirmed',
+          detail: 'Se ha cerrado la sesión',
+          life: 3000,
+        });
+        isLoading.value = false;
+        authStore.logout(), 
+        router.push({ name: RouteNames.login })
+    },
+    reject: () => {},
+  });
+};
 </script>
+<template>
+  <Toast />
+  <ConfirmDialog class="w-96"></ConfirmDialog>
+  <div class="min-h-screen flex relative lg:static bg-surface-50 dark:bg-surface-950">
+      <div id="app-sidebar-11" class="w-[280px] bg-gray-300 dark:bg-surface-950 h-screen hidden lg:block flex-shrink-0 absolute lg:static left-0 top-0 z-10 border-r border-surface select-none">
+          <div class="flex flex-col h-full">
+              <div class="flex items-center px-8 flex-shrink-0 h-[60px]">
+                <div class="text-white dark:text-surface-0 font-medium bg-gray-800 p-4 rounded-xl">
+                  <h1>SISTEMA TAEKWONDO</h1>
+                </div>
+              </div>
+              <div class="overflow-y-auto">
+                  <ul class="list-none p-4 m-0">
+                      <li>
+                          <div
+                              v-styleclass="{
+                                  selector: '@next',
+                                  enterFromClass: 'hidden',
+                                  enterActiveClass: 'animate-slidedown',
+                                  leaveToClass: 'hidden',
+                                  leaveActiveClass: 'animate-slideup'
+                              }"
+                              class="p-4 flex items-center justify-between text-surface-600 dark:text-surface-200 cursor-pointer border-2 border-transparent border-rounded"
+                          >
+                              <span class="font-medium">APLICACIÓN</span>
+                              <i class="pi pi-chevron-down" />
+                          </div>
+                          <ul class="list-none p-0 m-0 overflow-hidden" v-for="option in menuOptions"   >
+                                <li v-if="option.roles.includes(authStore.user!.roles as Roles)"  :key="option.text">
+                                    <SidebarButton
+                                        :class="'rounded-xl flex items-center cursor-pointer p-4  dark:text-surface-100 border-2 border-transparent hover:bg-gray-700 hover:border-gray-700 dark:hover:border-surface-500 duration-150 transition-colors' + (option.link === router.currentRoute.value.name ? ' bg-gray-600 border-gray-600 dark:border-surface-500' : '')"
+                                        @click="router.push({ name: option.link })"
+                                        :active="props.activeMenu === option.link"
+                                        :text="option.text"
+                                        :icon="option.icon"
+                                    >
+                                        <!-- <i :class="[option.icon]" />
+                                        <span class="font-medium">{{ option.text }}</span> -->
+                                    </SidebarButton>
+                                </li>
+                          </ul>
+                      </li>
+                  </ul>
+                  
+
+
+                  <ul class="list-none p-4 m-0">
+                        <li>
+                            <div
+                                v-styleclass="{
+                                    selector: '@next',
+                                    enterFromClass: 'hidden',
+                                    enterActiveClass: 'animate-slidedown',
+                                    leaveToClass: 'hidden',
+                                    leaveActiveClass: 'animate-slideup'
+                                }"
+                                class="p-4 flex items-center justify-between text-surface-600 dark:text-surface-200 cursor-pointer"
+                            >
+                                <span class="font-medium">CONFIGURACIÓN</span>
+                                <i class="pi pi-chevron-down" />
+                            </div>
+                            <ul class="list-none p-0 m-0 overflow-hidden">
+                                <li>
+                                    <button
+                                        @click="cerrarSesion()"
+                                        class="rounded-xl flex items-center cursor-pointer p-4 border-2 border-transparent hover:border-surface-300 dark:hover:border-surface-500 text-surface-700 dark:text-surface-100 duration-150 transition-colors"
+                                    >
+                                        <i class="pi pi-discord mr-2 text-cyan-500" />
+                                        <span class="font-medium">Cerrar Sesión</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <a
+                                        class="rounded-xl flex items-center cursor-pointer p-4 border-2 border-transparent hover:border-surface-300 dark:hover:border-surface-500 text-surface-700 dark:text-surface-100 duration-150 transition-colors"
+                                    >
+                                        <i class="pi pi-slack mr-2 text-purple-500" />
+                                        <span class="font-medium">Slack</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        class="rounded-xl flex items-center cursor-pointer p-4 border-2 border-transparent hover:border-surface-300 dark:hover:border-surface-500 text-surface-700 dark:text-surface-100 duration-150 transition-colors"
+                                    >
+                                        <i class="pi pi-github mr-2 text-blue-500" />
+                                        <span class="font-medium">GitHub</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+              </div>
+              <div class="mt-auto">
+                  <hr class="mb-4 mx-4 border-t border-0 border-surface" />
+                  <div
+                      class="rounded-xl m-4 flex items-center cursor-pointer p-4 text-surface-700 dark:text-surface-100 border-2 border-transparent hover:border-surface-300 dark:hover:border-surface-500 duration-150 transition-colors bg-blue-500"
+                  >
+                      <img src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/render/image/public/block.images/blocks/avatars/circle/avatar-f-1.png" class="mr-2 w-7 h-7" />
+                      <div class="flex flex-col  justify-center ">
+                          <span class="font-medium text-white capitalize">{{ user?.roles + ' : ' + user?.primerNombre + ' ' + user?.primerApellido }}</span>
+                    </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div class="min-h-screen flex flex-col relative flex-auto ">
+          <div class="h-[60px] flex justify-between items-center px-8 bg-gray-300 dark:bg-surface-950 border-b border-surface relative lg:static">
+              <a
+                  v-styleclass="{
+                      selector: '#app-sidebar-11',
+                      enterFromClass: 'hidden',
+                      enterActiveClass: 'animate-fadeinleft',
+                      leaveToClass: 'hidden',
+                      leaveActiveClass: 'animate-fadeoutleft',
+                      hideOnOutsideClick: true
+                  }"
+                  class="cursor-pointer block lg:hidden text-surface-700 dark:text-surface-100 mr-4 mt-1"
+              >
+                  <i class="pi pi-bars text-4xl" />
+              </a>
+              <a
+                  v-styleclass="{
+                      selector: '@next',
+                      enterFromClass: 'hidden',
+                      enterActiveClass: 'animate-fadein',
+                      leaveToClass: 'hidden',
+                      leaveActiveClass: 'animate-fadeout',
+                      hideOnOutsideClick: true
+                  }"
+                  class="cursor-pointer block lg:hidden text-surface-700 dark:text-surface-100"
+              >
+                  <i class="pi pi-ellipsis-v text-2xl" />
+              </a>
+              <ul
+                  class="list-none p-0 m-0 hidden lg:flex lg:items-center select-none lg:flex-row w-auto lg:w-full border lg:border-0 border-surface bg-surface-0 dark:bg-surface-950 right-0 top-full z-10 shadow lg:shadow-none absolute lg:static"
+              >
+                  <li class="border-t border-surface lg:border-t-0 ml-auto">
+                      <a class="flex p-4 lg:px-4 lg:py-2 items-center hover:bg-surface-100 dark:hover:bg-surface-700 font-medium rounded-border cursor-pointer duration-150 transition-colors">
+                          <img src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/render/image/public/block.images/blocks/avatars/circle/avatar-f-1.png" class="mr-4 lg:mr-0 w-8 h-8" />
+                          <div class="block lg:hidden">
+                              <div class="text-surface-900 dark:text-surface-0 font-medium">{{ user?.primerNombre + ' ' + user?.primerApellido }}</div>
+                              <span class="text-surface-600 dark:text-surface-200 font-medium text-sm">Marketing Specialist</span>
+                          </div>
+                      </a>
+                  </li>
+              </ul>
+          </div>
+          <div class="p-8 flex flex-col flex-auto ">
+              <div class="border-2 border-dashed border-surface rounded-border bg-surface-0 dark:bg-surface-950 flex-auto" >  
+              <RouterView />
+              </div>
+          </div>
+      </div>
+  </div>
+</template>

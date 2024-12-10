@@ -1,9 +1,10 @@
 <template>
-  <h1 class="text-2xl font-semibold mb-4">Login</h1>
+  <h1 class="text-2xl font-semibold">Bienvenido de nuevo </h1>
+  <p class="mb-4">Inicia sesión con tu correo y contraseña</p>
   <form @submit.prevent="onLogin">
     <!-- Username Input -->
     <div class="mb-4">
-      <label for="email" class="block text-gray-600">Correo</label>
+      <label for="email" class="block text-gray-600">Usuario</label>
       <input
         v-model="myForm.email"
         ref="emailInputRef"
@@ -11,21 +12,29 @@
         id="email"
         name="email"
         class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-        autocomplete="off"
+        
       />
     </div>
     <!-- Password Input -->
     <div class="mb-4">
       <label for="password" class="block text-gray-600">Contraseña</label>
-      <input
+      <div class="flex">
+        <input
         v-model="myForm.password"
         ref="passwordInputRef"
-        type="password"
+        :type="showPassword ? 'text' : 'password'" 
         id="password"
         name="password"
         class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
         autocomplete="off"
-      />
+        />
+        <div class="cursor-pointer py-2 px-4 rounded-r-md bg-blue-500"
+          @click="showPassword = !showPassword">
+          <span class="text-white">
+            <i :class="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+          </span>
+      </div>
+    </div>
     </div>
     <!-- Remember Me Checkbox -->
     <div class="mb-4 flex items-center">
@@ -66,6 +75,8 @@ const toast = useToast();
 
 const emailInputRef = ref<HTMLInputElement | null>(null);
 const passwordInputRef = ref<HTMLInputElement | null>(null);
+
+const showPassword = ref(false);
 
 const myForm = reactive({
   email: '',
