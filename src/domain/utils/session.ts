@@ -18,12 +18,12 @@ export const getSession = () => {
  * Removes session from local storage
  */
 export const removeSession = () => {
-	localStorage.removeItem(KeyNames.token);
-	localStorage.removeItem(KeyNames.period);
-	localStorage.removeItem(KeyNames.selectedAccountCenter);
+	localStorage.removeItem("token");
+	//localStorage.removeItem(KeyNames.period);
+	//localStorage.removeItem(KeyNames.selectedAccountCenter);
 }
 
 // set session in local storage
 export const setSession = (token: string) => {
-	localStorage.setItem(KeyNames.token, token);
+	localStorage.setItem("token", token);
 }

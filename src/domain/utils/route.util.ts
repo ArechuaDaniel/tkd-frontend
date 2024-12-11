@@ -11,7 +11,16 @@ export enum RouteNames {
 	editClubView = 'editClubView',
 	sucursalView = 'sucursalView',
 	addSucursalView = 'addSucursalView',
-	editSucursalView = 'editSucursalView',
+	editSucursalView = 'editSucuralView',
+	horariosView = 'horariosView',
+	addHorariosView = 'addHorariosView',
+	editHorariosView = 'editHorariosView',
+	asistenciaView = 'asistenciaView',
+	addAsitenciaView = 'adAsitenciaView',
+	editAsistenciaView = 'editAsistenciaView',
+	asensoView = 'asensoView',
+	addAsensoView = 'adAsensoView',
+	editAsensoView = 'editAsensoView',
 	login = 'login',
 
 	nullRoute = ''

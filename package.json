@@ -17,7 +17,7 @@
     "@primevue/themes": "^4.2.4",
     "@tanstack/vue-query": "^5.52.0",
     "@tanstack/vue-query-devtools": "^5.52.0",
-    "@vuesimple/vs-toast": "^3.0.7",
+    "@vuesimple/vs-toast": "^3.0.5",
     "@vueuse/core": "^11.0.3",
     "axios": "^1.7.5",
     "pinia": "^2.1.7",

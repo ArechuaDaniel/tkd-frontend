@@ -77,6 +77,51 @@ export const adminRoutes : RouteRecordRaw = {
             component: () => import('../views/sucursal/AddSucursal.vue')
         },
         {
+            path: 'horario',
+            name: RouteNames.horariosView, 
+            component: () => import('../views/horario/HorarioView.vue')
+        },
+        {
+            path: 'horario/agregar',
+            name: RouteNames.addHorariosView, 
+            component: () => import('../views/horario/AddHorario.vue')
+        },
+        {
+            path: 'horario/editar/:id',
+            name: RouteNames.editHorariosView, 
+            component: () => import('../views/horario/AddHorario.vue')
+        },
+        {
+            path: 'asistencia',
+            name: RouteNames.asistenciaView, 
+            component: () => import('../views/asistencia/AsistenciaView.vue')
+        },
+        {
+            path: 'asistencia/agregar',
+            name: RouteNames.addAsitenciaView, 
+            component: () => import('../views/asistencia/AddAsistencia.vue')
+        },
+        {
+            path: 'asistencia/editar/:id',
+            name: RouteNames.editAsistenciaView, 
+            component: () => import('../views/asistencia/AddAsistencia.vue')
+        },
+        {
+            path: 'asenso',
+            name: RouteNames.asensoView, 
+            component: () => import('../views/asenso/AsensoView.vue')
+        },
+        {
+            path: 'asenso/agregar',
+            name: RouteNames.addAsensoView, 
+            component: () => import('../views/asenso/AddAsenso.vue')
+        },
+        {
+            path: 'asenso/editar/:id',
+            name: RouteNames.editAsensoView, 
+            component: () => import('../views/asenso/AddAsenso.vue')
+        },
+        {
             path: 'products/:productId',
             name: 'admin-product', 
             props: true,

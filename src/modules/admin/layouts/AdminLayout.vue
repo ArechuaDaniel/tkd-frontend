@@ -59,8 +59,26 @@ const menuOptions: Option[] = [
     {
 		text: "Horarios",
 		icon: "pi pi-clock mr-2 text-cyan-500",
-		link: RouteNames.alumnosView,
-		roles: [Roles.ADMIN,Roles.ASOCIACION, Roles.CLUB, Roles.SUCURSAL, Roles.INSTRUCTOR],
+		link: RouteNames.horariosView,
+		roles: [Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR],
+	},
+    {
+		text: "Asistencia",
+		icon: "pi pi-calendar-clock mr-2 text-cyan-500",
+		link: RouteNames.asistenciaView,
+		roles: [Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR],
+	},
+    {
+		text: "Pagos",
+		icon: "pi pi-money-bill mr-2 text-cyan-500",
+		link: RouteNames.asistenciaView,
+		roles: [Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR],
+	},
+    {
+		text: "Asensos",
+		icon: "pi pi-graduation-cap mr-2 text-cyan-500",
+		link: RouteNames.asensoView,
+		roles: [Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR, Roles.CLUB],
 	},
 ];
 const settingOptions: Option[] = [
@@ -190,7 +208,7 @@ const cerrarSesion = async () => {
                                 <li>
                                     <button
                                         @click="cerrarSesion()"
-                                        class="rounded-xl flex items-center cursor-pointer p-4 border-2 border-transparent hover:border-surface-300 dark:hover:border-surface-500 text-white dark:text-surface-100 duration-150 transition-colors"
+                                        class="rounded-xl flex items-center cursor-pointer p-4 border-2 border-transparent hover:border-surface-300 dark:hover:border-surface-500 hover:bg-gray-700 w-full text-white dark:text-surface-100 duration-150 transition-colors"
                                     >
                                         <i class="pi pi-sign-out mr-2 text-cyan-500" />
                                         <span class="font-medium">Cerrar Sesión</span>
@@ -209,7 +227,7 @@ const cerrarSesion = async () => {
                   >
                       <img src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/render/image/public/block.images/blocks/avatars/circle/avatar-f-1.png" class="mr-2 w-7 h-7" />
                       <div class="flex flex-col  justify-center ">
-                          <span class="font-medium text-white capitalize">{{ user?.roles + ' : ' + user?.primerNombre + ' ' + user?.primerApellido }}</span>
+                          <span class="font-medium text-white capitalize text-sm">{{ user?.roles + ' : ' + user?.primerNombre + ' ' + user?.primerApellido }}</span>
                     </div>
                   </div>
               </div>
@@ -251,7 +269,7 @@ const cerrarSesion = async () => {
                       <a class="flex p-4 lg:px-4 lg:py-2 items-center hover:bg-surface-100 dark:hover:bg-surface-700 font-medium rounded-border cursor-pointer duration-150 transition-colors">
                           <img src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/render/image/public/block.images/blocks/avatars/circle/avatar-f-1.png" class="mr-4 lg:mr-0 w-8 h-8" />
                           <div class="block lg:hidden">
-                              <div class="text-surface-900 dark:text-surface-0 font-medium">{{ user?.primerNombre + ' ' + user?.primerApellido }}</div>
+                              <div class="text-surface-900 dark:text-surface-0 text-xs">{{ user?.primerNombre + ' ' + user?.primerApellido }}</div>
                               <span class="text-surface-600 dark:text-surface-200 font-medium text-sm">Marketing Specialist</span>
                           </div>
                       </a>

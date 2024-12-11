@@ -262,7 +262,7 @@ const statusOptions = ref([
     <div class="flex flex-row justify-end w-full h-full">
       <div class="flex md:flex-row flex-col justify-between md:w-1/2 w-full p-8">
         <button
-          v-if="clubModel.idAsociacion"
+          v-if="clubModel.idClub"
           @click="startRemoving()"
           class="p-3 hover:bg-red-800 bg-red-500 rounded text-white flex items-center md:w-28"
         >

@@ -1,7 +1,6 @@
 //import { makeRequest } from '@/domain/utils/network.util'
 
 import { makeRequest } from "@/domain/utils/network.util"
-import type { b } from "node_modules/@tanstack/vue-query/build/modern/queryClient-Bq4NnYa7"
 
 const { VITE_APP_API_URL } = import.meta.env
 

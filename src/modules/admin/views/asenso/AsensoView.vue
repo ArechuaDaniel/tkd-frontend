@@ -9,48 +9,55 @@ import { triggerGetAllSucursals, type Sucursals } from '@/api/sucursal';
 import { Roles } from '@/domain/entities/Roles';
 import { useAuthStore } from '@/modules/auth/stores/auth.store';
 import NotAllowed from '../../components/NotAllowed.vue';
+import { triggerGetAllHorarioss, type Horarios } from '@/api/horario';
+import { triggerGetAllAsistencias, type Asistencia } from '@/api/asistencia';
+import { triggerGetAllAsensos, type Asenso } from '@/api/asenso';
 
-const allowedRoles = [Roles.SUCURSAL, Roles.CLUB, Roles.ADMIN];
+const allowedRoles = [Roles.SUCURSAL, Roles.CLUB, Roles.ADMIN, Roles.INSTRUCTOR];
 
 const authStore = useAuthStore()
 const router = useRouter();
-const loadedSucursal = ref<Sucursals[]>([]);
+const loadedAsenso = ref<Asenso[]>([]);
 const isLoading = ref(false);
 
+
 onMounted(async () => {
-  if (authStore.user?.roles === Roles.ASOCIACION || authStore.user?.roles === Roles.INSTRUCTOR ) {
+  if (authStore.user?.roles === Roles.ASOCIACION ) {
 		window.location.href = '/admin/dashboard'
 		return;
 	}
   isLoading.value = true;
-  loadedSucursal.value = await triggerGetAllSucursals();
-
+  loadedAsenso.value = await triggerGetAllAsensos();
   isLoading.value = false;
+
+ 
 });
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  nombreSucursal: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  nombre: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'alumno.primerNombre' : { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'alumno.primerApellido' : { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'alumno.cedulaAlumno' : { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
 </script>
 <template>
   <NotAllowed v-if="!allowedRoles.includes(authStore.user?.roles as Roles)" />
   <div v-else>
 
-    <h1 class="text-3xl font-bold">Datos de la Sucursal</h1>
+    <h1 class="text-3xl font-bold">Datos de los Asensos</h1>
     <div class="flex justify-end items-end">
       <label for="" class="w-full">&nbsp;</label>
       <RouterLink
-      v-tooltip="'Añadir una nueva asociación'"
+      v-if="[Roles.ADMIN, Roles.CLUB].includes(authStore.user?.roles as Roles,)"
+      v-tooltip="'Añadir una nuevo asenso'"
       class="min-w-[100px] bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-400"
-      :to="{ name: RouteNames.addSucursalView }"
+      :to="{ name: RouteNames.addAsitenciaView}"
       aria-label="Añadir una nueva Sucursal"
       >
       <i class="pi pi-plus"></i>&nbsp; Agregar
     </RouterLink>
   </div>
   <DataTable
-  :value="loadedSucursal"
+  :value="loadedAsenso"
     stripedRows
     :loading="isLoading"
     :paginator="true"
@@ -60,21 +67,29 @@ const filters = ref({
     v-model:filters="filters"
     v-model:selection="filters"
   >
-  <Column field="idSucursal" header="Acción">
+  <Column field="idAsenso" header="Acción">
     <template #body="slotProps">
       <RouterLink
-      :to="'/admin/sucursal/editar/' +slotProps.data.idSucursal"
+      :to="'/admin/asenso/editar/' +slotProps.data.idAsenso"
         :class="[
           'bg-transparent border-blue-900 border-2 text-blue-900 py-1 px-2',
           'rounded-lg flex flex-row w-fit hover:bg-blue-900 hover:text-white mr-2',
         ]"
-        v-tooltip="'Editar alumno'"
+        v-tooltip="'Editar asenso'"
         >
         <i class="pi pi-pencil"></i>
       </RouterLink>
       </template>
     </Column>
-    <Column field="nombreSucursal" header="Sucursal" sortable :showFilterMenu="false">
+    <Column field="cinturon.color" header="Color">
+      <div>
+        <span class="">
+
+        </span>
+      </div>
+    </Column>
+    <Column field="cinturon.asensoColor" header="Cinturon" sortable></Column>
+    <Column field="alumno.cedulaAlumno" header="Cédula" sortable :showFilterMenu="false">
       <template #filter="{ filterModel, filterCallback }">
         <InputText
           type="text"
@@ -83,9 +98,20 @@ const filters = ref({
           class="p-column-filter w-28"
           placeholder="Buscar"
           />
-        </template>
+      </template>
     </Column>
-    <Column field="nombre" header="Nombre" sortable :showFilterMenu="false">
+    <Column field="alumno.primerNombre" header="Nombre" sortable :showFilterMenu="false">
+      <template #filter="{ filterModel, filterCallback }">
+        <InputText
+          type="text"
+          v-model="filterModel.value"
+          @input="filterCallback()"
+          class="p-column-filter w-28"
+          placeholder="Buscar"
+          />
+      </template>
+    </Column>
+    <Column field="alumno.primerApellido" header="Apellido" sortable :showFilterMenu="false">
       <template #filter="{ filterModel, filterCallback }">
         <InputText
         type="text"
@@ -93,14 +119,19 @@ const filters = ref({
           @input="filterCallback()"
           class="p-column-filter w-28"
           placeholder="Buscar"
-        />
+          />
       </template>
     </Column>
-    <Column field="fechaCreacion" header="Fecha Creación">
+    
+    <Column field="fechaAsenso" header="Fecha Asenso" sortable>
       <template #body="slotProps">
-        {{ Intl.DateTimeFormat('es-EC').format(new Date(slotProps.data.fechaCreacion)) }}
+        {{ Intl.DateTimeFormat('es-EC').format(new Date(slotProps.data.fechaAsenso)) }}
       </template>
     </Column>
+    <Column field="club.nombreClub" header="Club" sortable></Column>
+    <Column field="sucursal.nombreSucursal" header="Sucursal" sortable></Column>
+
+   
   </DataTable>
 </div>
 </template>

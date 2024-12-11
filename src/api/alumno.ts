@@ -36,14 +36,14 @@ export interface Alumnos {
 //   )
 //   return output  ? {...output , clubs: output.clubs} : [] 
 // }
-export const triggerGetAllAlumnos = async (): Promise<Alumnos[] | null> => {
+export const triggerGetAllAlumnos = async (): Promise<Alumnos[] > => {
   try {
     const output = await makeRequest<Alumnos[]>(
       `${VITE_APP_API_URL}/alumnos`
     );
     if (!output || !Array.isArray(output)) {
       console.error("Respuesta inesperada de la API", output);
-      return null;
+      return [];
     }
 
     // Devuelve directamente la lista de alumnos si es válida.
@@ -54,7 +54,7 @@ export const triggerGetAllAlumnos = async (): Promise<Alumnos[] | null> => {
     }));
   } catch (error) {
     console.error("Error obteniendo alumnos", error);
-    return null;
+    return [];
   }
 };
 export const triggerGetAlumnoById = async (

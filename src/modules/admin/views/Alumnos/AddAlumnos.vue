@@ -351,7 +351,6 @@ const statusOptions = ref([
               showIcon
               fluid
               :showOnFocus="false"
-              inputId="buttondisplay"
               class="w-[13rem]"
               v-model="alumnosModel.fechaIngreso"
             />
