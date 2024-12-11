@@ -12,6 +12,12 @@ export interface Asenso {
     idAsenso: number,
     fechaAsenso: Date | undefined,
 }
+export interface Cinturon{
+  idCinturon: number,
+  asensoColor: string,
+  color: string,
+  color2?: string,
+}
 
 export const triggerGetAllAsensos = async (
   
@@ -52,5 +58,12 @@ export const triggerAsensoRemove = async (idAsenso:number): Promise<boolean> => 
 
 	return !!output;
 }
-
+export const triggerGetAllCinturones = async (
+  
+): Promise<Cinturon[]> => {
+  const output = await makeRequest<any>(
+    `${VITE_APP_API_URL}/asenso/cinturones`
+  )
+  return output ?? []
+}
 

@@ -50,7 +50,7 @@ const filters = ref({
       v-if="[Roles.ADMIN, Roles.CLUB].includes(authStore.user?.roles as Roles,)"
       v-tooltip="'Añadir una nuevo asenso'"
       class="min-w-[100px] bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-400"
-      :to="{ name: RouteNames.addAsitenciaView}"
+      :to="{ name: RouteNames.addAsensoView}"
       aria-label="Añadir una nueva Sucursal"
       >
       <i class="pi pi-plus"></i>&nbsp; Agregar
@@ -82,11 +82,44 @@ const filters = ref({
       </template>
     </Column>
     <Column field="cinturon.color" header="Color">
-      <div>
-        <span class="">
+      <template #body="slotProps">
+        <div v-if="!slotProps.data.cinturon.color2" class="w-[4rem] border border-gray-600 ">
+          <div v-if="slotProps.data.cinturon.color == 'black'">
+            <p class="h-[1rem] bg-black">
+              .
+            </p>
+            <p class="h-[1rem] bg-black">.</p>
+          </div>
+          <div v-if="slotProps.data.cinturon.color !== 'black'">
+            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color +'-500']">
+              .
+            </p>
+            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color +'-500']">
+              .
+            </p>
+          </div>
+        </div>
 
-        </span>
-      </div>
+        <div v-if="slotProps.data.cinturon.color2" class="w-[4rem] border border-gray-600 ">
+          <div v-if="slotProps.data.cinturon.color2 === 'black'">
+            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color +'-500']">
+              .
+            </p>
+            <p class="h-[1rem] bg-black">
+              .
+            </p>
+          </div>
+          <div v-if="slotProps.data.cinturon.color2 !== 'black'">
+            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color +'-500']">
+              .
+            </p>
+            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color2 +'-500']">
+              .
+            </p>
+          </div>
+        </div>
+       
+      </template>
     </Column>
     <Column field="cinturon.asensoColor" header="Cinturon" sortable></Column>
     <Column field="alumno.cedulaAlumno" header="Cédula" sortable :showFilterMenu="false">
