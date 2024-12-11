@@ -21,6 +21,9 @@ export enum RouteNames {
 	asensoView = 'asensoView',
 	addAsensoView = 'adAsensoView',
 	editAsensoView = 'editAsensoView',
+	pagoView = 'pagoView',
+	addPagoView = 'adPagoView',
+	editPagoView = 'editPagoView',
 	login = 'login',
 
 	nullRoute = ''

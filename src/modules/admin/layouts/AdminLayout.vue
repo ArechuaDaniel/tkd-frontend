@@ -71,7 +71,7 @@ const menuOptions: Option[] = [
     {
 		text: "Pagos",
 		icon: "pi pi-money-bill mr-2 text-cyan-500",
-		link: RouteNames.asistenciaView,
+		link: RouteNames.pagoView,
 		roles: [Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR],
 	},
     {

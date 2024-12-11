@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FilterMatchMode } from '@primevue/core/api';
-import { Column, DataTable} from 'primevue';
+import { Column, DataTable, Dropdown, Tag} from 'primevue';
 import InputText from 'primevue/inputtext';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -12,12 +12,13 @@ import NotAllowed from '../../components/NotAllowed.vue';
 import { triggerGetAllHorarioss, type Horarios } from '@/api/horario';
 import { triggerGetAllAsistencias, type Asistencia } from '@/api/asistencia';
 import { triggerGetAllAsensos, type Asenso } from '@/api/asenso';
+import { triggerGetAllPagos, type Pago } from '@/api/pago';
 
 const allowedRoles = [Roles.SUCURSAL, Roles.CLUB, Roles.ADMIN, Roles.INSTRUCTOR];
 
 const authStore = useAuthStore()
 const router = useRouter();
-const loadedAsenso = ref<Asenso[]>([]);
+const loadedPago = ref<Pago[]>([]);
 const isLoading = ref(false);
 
 
@@ -27,7 +28,7 @@ onMounted(async () => {
 		return;
 	}
   isLoading.value = true;
-  loadedAsenso.value = await triggerGetAllAsensos();
+  loadedPago.value = await triggerGetAllPagos();
   isLoading.value = false;
 
  
@@ -37,27 +38,27 @@ const filters = ref({
   'alumno.primerNombre' : { value: null, matchMode: FilterMatchMode.CONTAINS },
   'alumno.primerApellido' : { value: null, matchMode: FilterMatchMode.CONTAINS },
   'alumno.cedulaAlumno' : { value: null, matchMode: FilterMatchMode.CONTAINS },
+  mesPago: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
 </script>
 <template>
   <NotAllowed v-if="!allowedRoles.includes(authStore.user?.roles as Roles)" />
   <div v-else>
 
-    <h1 class="text-3xl font-bold">Datos de los Asensos</h1>
+    <h1 class="text-3xl font-bold">Datos de los Pagos</h1>
     <div class="flex justify-end items-end">
       <label for="" class="w-full">&nbsp;</label>
       <RouterLink
-      v-if="[Roles.ADMIN, Roles.CLUB].includes(authStore.user?.roles as Roles,)"
-      v-tooltip="'Añadir una nuevo asenso'"
+      v-tooltip="'Añadir un nuevo pago'"
       class="min-w-[100px] bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-400"
-      :to="{ name: RouteNames.addAsensoView}"
-      aria-label="Añadir un nuevo Asenso"
+      :to="{ name: RouteNames.addPagoView}"
+      aria-label="Añadir un nuevo pago"
       >
       <i class="pi pi-plus"></i>&nbsp; Agregar
     </RouterLink>
   </div>
   <DataTable
-  :value="loadedAsenso"
+  :value="loadedPago"
     stripedRows
     :loading="isLoading"
     :paginator="true"
@@ -67,61 +68,21 @@ const filters = ref({
     v-model:filters="filters"
     v-model:selection="filters"
   >
-  <Column field="idAsenso" header="Acción">
+  <Column field="idPago" header="Acción">
     <template #body="slotProps">
       <RouterLink
-      :to="'/admin/asenso/editar/' +slotProps.data.idAsenso"
+      :to="'/admin/pago/editar/' +slotProps.data.idPago"
         :class="[
           'bg-transparent border-blue-900 border-2 text-blue-900 py-1 px-2',
           'rounded-lg flex flex-row w-fit hover:bg-blue-900 hover:text-white mr-2',
         ]"
-        v-tooltip="'Editar asenso'"
+        v-tooltip="'Editar pago'"
         >
         <i class="pi pi-pencil"></i>
       </RouterLink>
       </template>
     </Column>
-    <Column field="cinturon.color" header="Color">
-      <template #body="slotProps">
-        <div v-if="!slotProps.data.cinturon.color2" class="w-[4rem] border border-gray-600 ">
-          <div v-if="slotProps.data.cinturon.color == 'black'">
-            <p class="h-[1rem] bg-black">
-              .
-            </p>
-            <p class="h-[1rem] bg-black">.</p>
-          </div>
-          <div v-if="slotProps.data.cinturon.color !== 'black'">
-            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color +'-500']">
-              .
-            </p>
-            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color +'-500']">
-              .
-            </p>
-          </div>
-        </div>
-
-        <div v-if="slotProps.data.cinturon.color2" class="w-[4rem] border border-gray-600 ">
-          <div v-if="slotProps.data.cinturon.color2 === 'black'">
-            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color +'-500']">
-              .
-            </p>
-            <p class="h-[1rem] bg-black">
-              .
-            </p>
-          </div>
-          <div v-if="slotProps.data.cinturon.color2 !== 'black'">
-            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color +'-500']">
-              .
-            </p>
-            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color2 +'-500']">
-              .
-            </p>
-          </div>
-        </div>
-       
-      </template>
-    </Column>
-    <Column field="cinturon.asensoColor" header="Cinturon" sortable></Column>
+    
     <Column field="alumno.cedulaAlumno" header="Cédula" sortable :showFilterMenu="false">
       <template #filter="{ filterModel, filterCallback }">
         <InputText
@@ -155,16 +116,33 @@ const filters = ref({
           />
       </template>
     </Column>
-    
-    <Column field="fechaAsenso" header="Fecha Asenso" sortable>
+    <Column field="valor" header="Valor" >
       <template #body="slotProps">
-        {{ Intl.DateTimeFormat('es-EC').format(new Date(slotProps.data.fechaAsenso)) }}
+      {{Intl.NumberFormat('es-EC', { style: 'currency', currency: 'USD' }).format(slotProps.data.valor)}}
       </template>
     </Column>
-    <Column field="club.nombreClub" header="Club" sortable></Column>
-    <Column field="sucursal.nombreSucursal" header="Sucursal" sortable></Column>
-
-   
+    <Column field="fechaPago" header="Fecha Pago" sortable>
+      <template #body="slotProps">
+        {{ Intl.DateTimeFormat('es-EC').format(new Date(slotProps.data.fechaPago)) }}
+      </template>
+    </Column>
+    <Column field="mesPago" header="Mes Pago" sortable>
+      <template #filter="{ filterModel, filterCallback }">
+        <Dropdown
+        v-model="filterModel.value"
+        @change="filterCallback()"
+        :options="['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']"
+        :showClear="true"
+        placeholder="Seleccione"
+        class="p-column-filter capitalize"
+        >
+        <template #option="slotProps">
+          <Tag :value="slotProps.option" />
+        </template>
+      </Dropdown>
+    </template>
+    </Column>
+    <Column field="sucursal.nombreSucursal" header="Sucursal" ></Column>
   </DataTable>
 </div>
 </template>

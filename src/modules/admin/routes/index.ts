@@ -122,6 +122,21 @@ export const adminRoutes : RouteRecordRaw = {
             component: () => import('../views/asenso/AddAsenso.vue')
         },
         {
+            path: 'pago',
+            name: RouteNames.pagoView, 
+            component: () => import('../views/pago/PagoView.vue')
+        },
+        {
+            path: 'pago/agregar',
+            name: RouteNames.addPagoView, 
+            component: () => import('../views/pago/AddPago.vue')
+        },
+        {
+            path: 'pago/editar/:id',
+            name: RouteNames.editPagoView, 
+            component: () => import('../views/pago/AddPago.vue')
+        },
+        {
             path: 'products/:productId',
             name: 'admin-product', 
             props: true,
