@@ -13,6 +13,7 @@ export interface Pago {
     mesPago: string,
     formaPago?: string | undefined,
     comprobante?: string | undefined,
+    sucursal?: any
 }
 
 export const triggerGetAllPagos = async (

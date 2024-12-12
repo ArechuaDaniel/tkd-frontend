@@ -37,10 +37,10 @@ const filters = ref({
   <div class="flex justify-end items-end">
     <label for="" class="w-full">&nbsp;</label>
     <RouterLink
-      v-tooltip="'Añadir una nueva asociación'"
+      v-tooltip="'Añadir una nuevo Club'"
       class="min-w-[100px] bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-400"
       :to="{ name: RouteNames.addClubView }"
-      aria-label="Añadir un nuevo contrato"
+      aria-label="Añadir un nuevo Club"
     >
       <i class="pi pi-plus"></i>&nbsp; Agregar
     </RouterLink>
@@ -64,7 +64,7 @@ const filters = ref({
           'bg-transparent border-blue-900 border-2 text-blue-900 py-1 px-2',
           'rounded-lg flex flex-row w-fit hover:bg-blue-900 hover:text-white mr-2',
         ]"
-        v-tooltip="'Editar alumno'"
+        v-tooltip="'Editar Club'"
       >
         <i class="pi pi-pencil"></i>
       </RouterLink>

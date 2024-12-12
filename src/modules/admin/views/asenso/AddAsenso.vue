@@ -60,9 +60,6 @@ onMounted(async () => {
   loadedSucursal.value = await triggerGetAllSucursals();
   isLoading.value = false;
 
-  isLoadingAlumnos.value = true;
-  loadedAlumnos.value = await triggerGetAllAlumnos();
-  isLoadingAlumnos.value = false;
 
   isLoadingClub.value = true;
   loadedClub.value = await triggerGetAllClubs();
@@ -76,6 +73,12 @@ onMounted(async () => {
   reassembleModel();
   //queryProvincias();
 });
+const onChangeSucursal = async () => {
+
+ isLoadingAlumnos.value = true;
+ loadedAlumnos.value = await triggerGetAllAlumnos(asensoModel.value.idSucursal);
+ isLoadingAlumnos.value = false;
+}
 
 const reassembleModel = async () => {
   if (idAsenso) {
@@ -165,48 +168,6 @@ const formattedAlumnos = computed(() =>
     <form>
       <section class="flex flex-col text-sm gap-2 mt-2 bg-white w-full my-2 rounded-lg shadow">
         <section class="flex flex-col gap-2 justify-center items-center">
-          
-          <div class="flex flex-col items-start">
-            <label for="idAlumno" class="block text-gray-600">Alumno</label>
-            <Dropdown
-              v-model="asensoModel.idAlumno"
-              ref="fullNameInputRef"
-              type="text"
-              id="idAlumno"
-              name="idAlumno"
-              class="w-[15rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500"
-              :options="formattedAlumnos"
-              optionLabel="fullName"
-              optionValue="id"
-              placeholder="Seleccione"
-            />
-          </div>
-          <div class="flex flex-col items-start">
-            <label for="idCinturon" class="block text-gray-600">Cinturon</label>
-            <Dropdown
-              v-model="asensoModel.idCinturon"
-              ref="fullNameInputRef"
-              type="text"
-              id="idCinturon"
-              name="idCinturon"
-              class="w-[15rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500"
-              :options="loadedCinturon"
-              optionLabel="asensoColor"
-              optionValue="idCinturon"
-              placeholder="Seleccione"
-            />
-          </div>
-          <div class="flex flex-col items-start">
-            <label for="fechaRegistro" class="block text-gray-600">Fecha Asenso</label>
-            <DatePicker
-              showIcon
-              fluid
-              :showOnFocus="false"
-              inputId="buttondisplay"
-              class="w-[13rem]"
-              v-model="asensoModel.fechaAsenso"
-            />
-          </div>
           <div class="flex flex-col items-start">
             <label for="idSucursal" class="block text-gray-600">Club</label>
             <Dropdown
@@ -235,8 +196,56 @@ const formattedAlumnos = computed(() =>
               optionLabel="nombreSucursal"
               optionValue="idSucursal"
               placeholder="Seleccione"
+              :disabled="!asensoModel.idClub"
+              @update:modelValue="onChangeSucursal"
             />
           </div>
+          <div class="flex flex-col items-start">
+            <label for="idAlumno" class="block text-gray-600">Alumno</label>
+            <Dropdown
+              v-model="asensoModel.idAlumno"
+              ref="fullNameInputRef"
+              type="text"
+              id="idAlumno"
+              name="idAlumno"
+              class="w-[15rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500"
+              :options="formattedAlumnos"
+              optionLabel="fullName"
+              optionValue="id"
+              placeholder="Seleccione"
+              :disabled="!asensoModel.idSucursal"
+            />
+          </div>
+          <div class="flex flex-col items-start">
+            <label for="idCinturon" class="block text-gray-600">Cinturon</label>
+            <Dropdown
+              v-model="asensoModel.idCinturon"
+              ref="fullNameInputRef"
+              type="text"
+              id="idCinturon"
+              name="idCinturon"
+              class="w-[15rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500"
+              :options="loadedCinturon"
+              optionLabel="asensoColor"
+              optionValue="idCinturon"
+              placeholder="Seleccione"
+              :disabled="!asensoModel.idAlumno"
+            />
+          </div>
+          <div class="flex flex-col items-start">
+            <label for="fechaRegistro" class="block text-gray-600">Fecha Asenso</label>
+            <DatePicker
+              showIcon
+              fluid
+              :showOnFocus="false"
+              inputId="buttondisplay"
+              class="w-[13rem]"
+              v-model="asensoModel.fechaAsenso"
+              :disabled="!asensoModel.idCinturon"
+            />
+          </div>
+          
+          
           
           
         </section>

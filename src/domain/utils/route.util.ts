@@ -26,5 +26,9 @@ export enum RouteNames {
 	editPagoView = 'editPagoView',
 	login = 'login',
 
+	userView = 'userView',
+	addUserView = 'adUserView',
+	editUserView = 'editUserView',
+
 	nullRoute = ''
 };

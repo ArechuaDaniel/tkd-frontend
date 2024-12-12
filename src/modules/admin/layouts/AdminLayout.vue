@@ -28,55 +28,55 @@ type Option = {
 const menuOptions: Option[] = [
 	{
 		text: "Dashboard",
-		icon: "pi pi-home mr-2 text-cyan-500",
+		icon: "pi pi-home mr-2 ",
 		link: RouteNames.home,
 		roles: [Roles.ADMIN,Roles.ASOCIACION, Roles.CLUB, Roles.SUCURSAL, Roles.INSTRUCTOR],
 	},
     {
 		text: "Asociación",
-		icon: "pi pi-warehouse mr-2 text-cyan-500",
+		icon: "pi pi-warehouse mr-2 ",
 		link: RouteNames.asociacionView,
 		roles: [Roles.ADMIN],
 	},
     {
 		text: "Club",
-		icon: "pi pi-warehouse mr-2 text-cyan-500",
+		icon: "pi pi-warehouse mr-2 ",
 		link: RouteNames.clubView,
 		roles: [Roles.ADMIN,Roles.ASOCIACION],
 	},
     {
 		text: "Sucursal",
-		icon: "pi pi-warehouse mr-2 text-cyan-500",
+		icon: "pi pi-warehouse mr-2 ",
 		link: RouteNames.sucursalView,
 		roles: [Roles.ADMIN,Roles.CLUB],
 	},
     {
 		text: "Alumnos",
-		icon: "pi pi-users mr-2 text-cyan-500",
+		icon: "pi pi-users mr-2 ",
 		link: RouteNames.alumnosView,
 		roles: [Roles.ADMIN,Roles.ASOCIACION, Roles.CLUB, Roles.SUCURSAL, Roles.INSTRUCTOR],
 	},
     {
 		text: "Horarios",
-		icon: "pi pi-clock mr-2 text-cyan-500",
+		icon: "pi pi-clock mr-2 ",
 		link: RouteNames.horariosView,
-		roles: [Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR],
+		roles: [Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR, Roles.CLUB,],
 	},
     {
 		text: "Asistencia",
-		icon: "pi pi-calendar-clock mr-2 text-cyan-500",
+		icon: "pi pi-calendar-clock mr-2 ",
 		link: RouteNames.asistenciaView,
-		roles: [Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR],
+		roles: [Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR , Roles.CLUB],
 	},
     {
 		text: "Pagos",
-		icon: "pi pi-money-bill mr-2 text-cyan-500",
+		icon: "pi pi-money-bill mr-2 ",
 		link: RouteNames.pagoView,
-		roles: [Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR],
+		roles: [Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR, Roles.CLUB,],
 	},
     {
 		text: "Asensos",
-		icon: "pi pi-graduation-cap mr-2 text-cyan-500",
+		icon: "pi pi-graduation-cap mr-2 ",
 		link: RouteNames.asensoView,
 		roles: [Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR, Roles.CLUB],
 	},
@@ -84,11 +84,16 @@ const menuOptions: Option[] = [
 const settingOptions: Option[] = [
 	{
 		text: "Perfil",
-		icon: "pi pi-home mr-2 text-cyan-500",
+		icon: "pi pi-user mr-2 ",
 		link: RouteNames.home,
 		roles: [Roles.ADMIN,Roles.ASOCIACION, Roles.CLUB, Roles.SUCURSAL, Roles.INSTRUCTOR],
 	},
-    
+    {
+		text: "Usuarios",
+		icon: "pi pi-user mr-2 ",
+		link: RouteNames.userView,
+		roles: [Roles.ADMIN,Roles.ASOCIACION, Roles.CLUB],
+	},
 ];
 const confirm = useConfirm();
 const toast = useToast();
@@ -130,7 +135,7 @@ const cerrarSesion = async () => {
   <Toast />
   <ConfirmDialog class="w-96"></ConfirmDialog>
   <div class="min-h-screen flex relative lg:static bg-surface-50 dark:bg-surface-950">
-      <div id="app-sidebar-11" class="w-[280px] bg-gray-800 dark:bg-surface-950 h-screen hidden lg:block flex-shrink-0 absolute lg:static left-0 top-0 z-10 border-r border-surface select-none">
+      <div id="app-sidebar-11" class="w-[280px] bg-sky-800 dark:bg-surface-950 h-screen hidden lg:block flex-shrink-0 absolute lg:static left-0 top-0 z-10 border-r border-surface select-none rounded-br-3xl">
           <div class="flex flex-col h-full">
               <div class="flex items-center px-8 flex-shrink-0 h-[60px]">
                 <div class="flex flex-row text-white dark:text-surface-0 font-medium  rounded-xl">
@@ -159,7 +164,7 @@ const cerrarSesion = async () => {
                           <ul class="list-none p-0 m-0 overflow-hidden" v-for="option in menuOptions"   >
                                 <li v-if="option.roles.includes(authStore.user!.roles as Roles)"  :key="option.text">
                                     <SidebarButton
-                                        :class="'rounded-xl flex items-center cursor-pointer p-4 text-white  dark:text-surface-100 border-2 border-transparent hover:bg-gray-700 hover:border-gray-700 dark:hover:border-surface-500 duration-150 transition-colors' + (option.link === router.currentRoute.value.name ? ' bg-gray-600 border-gray-600 dark:border-surface-500' : '')"
+                                        :class="'rounded-xl flex items-center cursor-pointer p-4 text-white  dark:text-surface-100 border-2 border-transparent hover:bg-sky-700 hover:border-gray-700 dark:hover:border-surface-500 duration-150 transition-colors' + (option.link === router.currentRoute.value.name ? ' bg-sky-600 border-gray-600 dark:border-surface-500' : '')"
                                         @click="router.push({ name: option.link })"
                                         :active="props.activeMenu === option.link"
                                         :text="option.text"
@@ -193,7 +198,7 @@ const cerrarSesion = async () => {
                             <ul class="list-none p-0 m-0 overflow-hidden" v-for="option in settingOptions"   >
                                 <li v-if="option.roles.includes(authStore.user!.roles as Roles)"  :key="option.text">
                                     <SidebarButton
-                                        :class="'rounded-xl flex items-center cursor-pointer p-4 text-white  dark:text-surface-100 border-2 border-transparent hover:bg-gray-700 hover:border-gray-700 dark:hover:border-surface-500 duration-150 transition-colors' + (option.link === router.currentRoute.value.name ? ' bg-gray-600 border-gray-600 dark:border-surface-500' : '')"
+                                        :class="'rounded-xl flex items-center cursor-pointer p-4 text-white  dark:text-surface-100 border-2 border-transparent hover:bg-sky-700 hover:border-gray-700 dark:hover:border-surface-500 duration-150 transition-colors' + (option.link === router.currentRoute.value.name ? ' bg-sky-600 border-gray-600 dark:border-surface-500' : '')"
                                         @click="router.push({ name: option.link })"
                                         :active="props.activeMenu === option.link"
                                         :text="option.text"
@@ -233,9 +238,9 @@ const cerrarSesion = async () => {
               </div>
           </div>
       </div>
-
+      <!-- MOBILE -->
       <div class="min-h-screen flex flex-col relative flex-auto ">
-          <div class="h-[60px] flex justify-between items-center px-8 bg-gray-800 dark:bg-surface-950 border-b border-surface relative lg:static">
+          <div class="h-[60px] flex justify-between items-center px-8 bg-sky-800 rounded-br-3xl dark:bg-surface-950 border-b border-surface relative lg:static">
               <a
                   v-styleclass="{
                       selector: '#app-sidebar-11',
@@ -245,10 +250,11 @@ const cerrarSesion = async () => {
                       leaveActiveClass: 'animate-fadeoutleft',
                       hideOnOutsideClick: true
                   }"
-                  class="cursor-pointer block lg:hidden text-surface-700 dark:text-surface-100 mr-4 mt-1"
+                  class="cursor-pointer block lg:hidden text-white dark:text-surface-100 mr-4 mt-1"
               >
                   <i class="pi pi-bars text-4xl" />
               </a>
+              <!-- MOBILE -->
               <a
                   v-styleclass="{
                       selector: '@next',
@@ -258,7 +264,7 @@ const cerrarSesion = async () => {
                       leaveActiveClass: 'animate-fadeout',
                       hideOnOutsideClick: true
                   }"
-                  class="cursor-pointer block lg:hidden text-surface-700 dark:text-surface-100"
+                  class="cursor-pointer block lg:hidden text-white dark:text-surface-100"
               >
                   <i class="pi pi-ellipsis-v text-2xl" />
               </a>
@@ -269,14 +275,14 @@ const cerrarSesion = async () => {
                       <a class="flex p-4 lg:px-4 lg:py-2 items-center hover:bg-surface-100 dark:hover:bg-surface-700 font-medium rounded-border cursor-pointer duration-150 transition-colors">
                           <img src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/render/image/public/block.images/blocks/avatars/circle/avatar-f-1.png" class="mr-4 lg:mr-0 w-8 h-8" />
                           <div class="block lg:hidden">
-                              <div class="text-surface-900 dark:text-surface-0 text-xs">{{ user?.primerNombre + ' ' + user?.primerApellido }}</div>
-                              <span class="text-surface-600 dark:text-surface-200 font-medium text-sm">Marketing Specialist</span>
+                              <div class="text-white dark:text-surface-0 text-xs">{{ user?.primerNombre + ' ' + user?.primerApellido }}</div>
+                              
                           </div>
                       </a>
                   </li>
               </ul>
           </div>
-          <div class="p-8 flex flex-col flex-auto ">
+          <div class="p-8 flex flex-col flex-autofull w- max-h-full overflow-y-auto ">
               <div class="border-2 border-dashed border-surface rounded-border bg-surface-0 dark:bg-surface-950 flex-auto" >  
               <RouterView />
               </div>

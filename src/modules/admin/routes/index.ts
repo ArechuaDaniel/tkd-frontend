@@ -137,6 +137,21 @@ export const adminRoutes : RouteRecordRaw = {
             component: () => import('../views/pago/AddPago.vue')
         },
         {
+            path: 'usuario',
+            name: RouteNames.userView, 
+            component: () => import('../views/usuario/UserView.vue')
+        },
+        {
+            path: 'usuario/agregar',
+            name: RouteNames.addUserView, 
+            component: () => import('../views/usuario/AddUser.vue')
+        },
+        {
+            path: 'usuario/editar/:id',
+            name: RouteNames.editUserView, 
+            component: () => import('../views/usuario/AddUser.vue')
+        },
+        {
             path: 'products/:productId',
             name: 'admin-product', 
             props: true,

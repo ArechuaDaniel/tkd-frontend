@@ -53,7 +53,7 @@ const calcularEdad = (fechaNacimiento: any) => {
       v-tooltip="'Añadir una nueva asociación'"
       class="min-w-[100px] bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-400"
       :to="{ name: RouteNames.addAsociacionView }"
-      aria-label="Añadir una nueva Sucursal"
+      aria-label="Añadir una nueva Asociación"
     >
       <i class="pi pi-plus"></i>&nbsp; Agregar
     </RouterLink>
@@ -77,7 +77,7 @@ const calcularEdad = (fechaNacimiento: any) => {
           'bg-transparent border-blue-900 border-2 text-blue-900 py-1 px-2',
           'rounded-lg flex flex-row w-fit hover:bg-blue-900 hover:text-white mr-2',
         ]"
-        v-tooltip="'Editar alumno'"
+        v-tooltip="'Editar Asociación'"
       >
         <i class="pi pi-pencil"></i>
       </RouterLink>

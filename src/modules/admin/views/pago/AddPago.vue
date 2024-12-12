@@ -58,14 +58,18 @@ onMounted(async () => {
   loadedSucursal.value = await triggerGetAllSucursals();
   isLoading.value = false;
 
-  isLoadingAlumnos.value = true;
-  loadedAlumnos.value = await triggerGetAllAlumnos();
-  isLoadingAlumnos.value = false;
 
   //querySucursals();
   reassembleModel();
   //queryProvincias();
 });
+const onChangeSucursal = async () => {
+ 
+
+  isLoadingAlumnos.value = true;
+  loadedAlumnos.value = await triggerGetAllAlumnos(pagoModel.value.idSucursal);
+  isLoadingAlumnos.value = false;
+}
 
 const reassembleModel = async () => {
   if (idPago) {
@@ -157,7 +161,22 @@ const formattedAlumnos = computed(() =>
     <form>
       <section class="flex flex-col text-sm gap-2 mt-2 bg-white w-full my-2 rounded-lg shadow">
         <section class="flex flex-col gap-2 justify-center items-center">
-          
+          <div class="flex flex-col items-start" >
+            <label for="idSucursal" class="block text-gray-600">Sucursal</label>
+            <Dropdown
+              v-model="pagoModel.idSucursal"
+              ref="fullNameInputRef"
+              type="text"
+              id="idSucursal"
+              name="idSucursal"
+              class="w-[15rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500"
+              :options="loadedSucursal"
+              optionLabel="nombreSucursal"
+              optionValue="idSucursal"
+              placeholder="Seleccione"
+              @update:modelValue="onChangeSucursal"
+            />
+          </div>
           <div class="flex flex-col items-start">
             <label for="idAlumno" class="block text-gray-600">Alumno</label>
             <Dropdown
@@ -171,6 +190,7 @@ const formattedAlumnos = computed(() =>
               optionLabel="fullName"
               optionValue="id"
               placeholder="Seleccione"
+              :disabled="!pagoModel.idSucursal"
             />
           </div>
           
@@ -188,7 +208,7 @@ const formattedAlumnos = computed(() =>
           <div class="flex flex-col items-start">
             <label for="mesPago" class="block text-gray-600">Mes Pago</label>
             <Dropdown
-              v-model="pagoModel.formaPago"
+              v-model="pagoModel.mesPago"
               id="mesPago"
               name="mesPago" 
               class="w-[13rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500 capitalize"
@@ -239,21 +259,7 @@ const formattedAlumnos = computed(() =>
             </InputText>
             <!-- <small class="text-red-800">{{ validator.idaprobador }}</small> -->
           </div>
-          <div class="flex flex-col items-start" >
-            <label for="idSucursal" class="block text-gray-600">Sucursal</label>
-            <Dropdown
-              v-model="pagoModel.idSucursal"
-              ref="fullNameInputRef"
-              type="text"
-              id="idSucursal"
-              name="idSucursal"
-              class="w-[15rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500"
-              :options="loadedSucursal"
-              optionLabel="nombreSucursal"
-              optionValue="idSucursal"
-              placeholder="Seleccione"
-            />
-          </div>
+          
           
           
         </section>

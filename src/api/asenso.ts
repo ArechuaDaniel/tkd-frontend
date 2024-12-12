@@ -11,6 +11,7 @@ export interface Asenso {
     idCinturon: number,
     idAsenso: number,
     fechaAsenso: Date | undefined,
+    sucursal?: any,
 }
 export interface Cinturon{
   idCinturon: number,

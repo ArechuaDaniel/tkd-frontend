@@ -39,6 +39,7 @@ const filters = ref({
   'alumno.primerApellido' : { value: null, matchMode: FilterMatchMode.CONTAINS },
   'alumno.cedulaAlumno' : { value: null, matchMode: FilterMatchMode.CONTAINS },
   mesPago: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'sucursal.nombreSucursal' : { value: null, matchMode: FilterMatchMode.EQUALS },
 });
 </script>
 <template>
@@ -126,7 +127,7 @@ const filters = ref({
         {{ Intl.DateTimeFormat('es-EC').format(new Date(slotProps.data.fechaPago)) }}
       </template>
     </Column>
-    <Column field="mesPago" header="Mes Pago" sortable>
+    <Column field="mesPago" header="Mes Pago" sortable :showFilterMenu="false">
       <template #filter="{ filterModel, filterCallback }">
         <Dropdown
         v-model="filterModel.value"
@@ -142,7 +143,38 @@ const filters = ref({
       </Dropdown>
     </template>
     </Column>
-    <Column field="sucursal.nombreSucursal" header="Sucursal" ></Column>
+
+    <Column
+    field="sucursal.nombreSucursal"
+    header="Sucursal"
+    sortable
+    :showFilterMenu="false"
+    v-if="[Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR, Roles.CLUB].includes(authStore.user?.roles as Roles,)">
+    <template #filter="{ filterModel, filterCallback }">
+        <Dropdown
+          v-if="[Roles.ADMIN, Roles.CLUB].includes(authStore.user?.roles as Roles,)"
+          v-model="filterModel.value"
+          @change="filterCallback()"
+          :options="
+            loadedPago
+              ?.map((x) => x.sucursal?.nombreSucursal || '')
+              .filter((value, index, self) => value && self.indexOf(value) === index) || []
+          "
+          :showClear="true"
+          placeholder="Seleccione"
+          class="p-column-filter"
+        >
+          <template #option="slotProps">
+            <Tag :value="slotProps.option" />
+          </template>
+        </Dropdown>
+      </template>
+      <template #body="slotProps">
+        <p class="capitalize">
+          {{ slotProps.data.sucursal?.nombreSucursal || 'Sin Sucursal' }}
+        </p>
+      </template>
+    </Column>
   </DataTable>
 </div>
 </template>

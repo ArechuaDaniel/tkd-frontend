@@ -10,6 +10,7 @@ export interface Asistencia {
     idAsistencia: number,
     idAlumno: number,
     fechaRegistro: Date | undefined,
+    sucursals?: any
 }
 
 export const triggerGetAllAsistencias = async (
@@ -22,6 +23,7 @@ export const triggerGetAllAsistencias = async (
     ...asistencia,
     alumno: asistencia.alumno || [], // Asegura que  siempre sea un array.
     horario: asistencia.horario || [],
+    sucursals: asistencia.sucursals || [],
   }));
 }
 export const triggerGetAsistenciaById = async (

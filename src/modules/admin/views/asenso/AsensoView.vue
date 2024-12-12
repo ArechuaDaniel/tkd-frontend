@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FilterMatchMode } from '@primevue/core/api';
-import { Column, DataTable} from 'primevue';
+import { Column, DataTable, Dropdown, Tag} from 'primevue';
 import InputText from 'primevue/inputtext';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -37,6 +37,7 @@ const filters = ref({
   'alumno.primerNombre' : { value: null, matchMode: FilterMatchMode.CONTAINS },
   'alumno.primerApellido' : { value: null, matchMode: FilterMatchMode.CONTAINS },
   'alumno.cedulaAlumno' : { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'sucursal.nombreSucursal' : { value: null, matchMode: FilterMatchMode.EQUALS },
 });
 </script>
 <template>
@@ -67,7 +68,7 @@ const filters = ref({
     v-model:filters="filters"
     v-model:selection="filters"
   >
-  <Column field="idAsenso" header="Acción">
+  <Column field="idAsenso" header="Acción" v-if="[Roles.ADMIN, Roles.CLUB].includes(authStore.user?.roles as Roles,)">
     <template #body="slotProps">
       <RouterLink
       :to="'/admin/asenso/editar/' +slotProps.data.idAsenso"
@@ -162,7 +163,37 @@ const filters = ref({
       </template>
     </Column>
     <Column field="club.nombreClub" header="Club" sortable></Column>
-    <Column field="sucursal.nombreSucursal" header="Sucursal" sortable></Column>
+    <Column
+    field="sucursal.nombreSucursal"
+    header="Sucursal"
+    sortable
+    :showFilterMenu="false"
+    v-if="[Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR, Roles.CLUB].includes(authStore.user?.roles as Roles,)">
+    <template #filter="{ filterModel, filterCallback }">
+        <Dropdown
+          v-if="[Roles.ADMIN, Roles.CLUB].includes(authStore.user?.roles as Roles,)"
+          v-model="filterModel.value"
+          @change="filterCallback()"
+          :options="
+            loadedAsenso
+              ?.map((x) => x.sucursal?.nombreSucursal || '')
+              .filter((value, index, self) => value && self.indexOf(value) === index) || []
+          "
+          :showClear="true"
+          placeholder="Seleccione"
+          class="p-column-filter"
+        >
+          <template #option="slotProps">
+            <Tag :value="slotProps.option" />
+          </template>
+        </Dropdown>
+      </template>
+      <template #body="slotProps">
+        <p class="capitalize">
+          {{ slotProps.data.sucursal?.nombreSucursal || 'Sin Sucursal' }}
+        </p>
+      </template>
+    </Column>
 
    
   </DataTable>

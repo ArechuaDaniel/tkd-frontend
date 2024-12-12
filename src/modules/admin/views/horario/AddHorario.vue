@@ -16,7 +16,7 @@ import { Roles } from '@/domain/entities/Roles';
 import { useAuthStore } from '@/modules/auth/stores/auth.store';
 import { triggerGetHorarioById, triggerHorarioRemove, triggerHorarioSave, type Horarios } from '@/api/horario';
 
-const allowedRoles = [Roles.SUCURSAL,Roles.INSTRUCTOR, Roles.ADMIN];
+const allowedRoles = [Roles.SUCURSAL,Roles.INSTRUCTOR, Roles.ADMIN, Roles.CLUB];
 const authStore = useAuthStore()
 const router = useRouter();
 
@@ -37,7 +37,7 @@ const horarioModel = ref<Horarios>({
 });
 
 onMounted(async () => {
-  if (authStore.user?.roles === Roles.ASOCIACION || authStore.user?.roles === Roles.CLUB) {
+  if (authStore.user?.roles === Roles.ASOCIACION) {
 		window.location.href = '/admin/dashboard'
 		return;
 	}
@@ -134,34 +134,23 @@ const startRemoving = async () => {
           
           <div class="flex flex-col  items-start">
             <label for="inicio" class="block text-gray-600">Inicio</label>
-            <DatePicker
+            <input
               v-model="horarioModel.inicio"
-              showIcon
-              fluid
-              iconDisplay="input"
-              timeOnly
-              inputId="templatedisplay"
-            >
-              <template #inputicon="slotProps">
-                <i class="pi pi-clock" @click="slotProps.clickCallback" />
-              </template>
-            </DatePicker>
-            
+              type="time"
+              id="inicio"
+              name="inicio"
+              class="w-[15rem] h-[3rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500"
+            />
           </div>
           <div class="flex flex-col items-start">
             <label for="fin" class="block text-gray-600">Fin</label>
-              <DatePicker
+            <input
               v-model="horarioModel.fin"
-              showIcon
-              fluid
-              iconDisplay="input"
-              timeOnly
-              inputId="templatedisplay"
-            >
-              <template #inputicon="slotProps">
-                <i class="pi pi-clock" @click="slotProps.clickCallback" />
-              </template>
-            </DatePicker>
+              type="time"
+              id="fin"
+              name="fin"
+              class="w-[15rem] h-[3rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500"
+            />
           </div>
           <div class="flex flex-col items-start">
             <label for="idSucursal" class="block text-gray-600">Sucursal</label>

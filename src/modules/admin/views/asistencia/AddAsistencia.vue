@@ -18,7 +18,7 @@ import { triggerGetAllHorarioss, triggerGetHorarioById, triggerHorarioRemove, tr
 import { triggerAsistenciaRemove, triggerAsistenciaSave, triggerGetAsistenciaById, type Asistencia } from '@/api/asistencia';
 import { triggerGetAllAlumnos, type Alumnos } from '@/api/alumno';
 
-const allowedRoles = [Roles.SUCURSAL,Roles.INSTRUCTOR, Roles.ADMIN];
+const allowedRoles = [Roles.SUCURSAL,Roles.INSTRUCTOR, Roles.ADMIN, Roles.CLUB];
 const authStore = useAuthStore()
 const router = useRouter();
 
@@ -41,13 +41,13 @@ const isLoadingClub = ref(false);
 const asistenciaModel = ref<Asistencia>({
     idSucursal: 0,
     idHorario: 0,
-    fechaRegistro: undefined,
+    fechaRegistro: new Date(),
     idAlumno: 0,
     idAsistencia: 0,
 });
 
 onMounted(async () => {
-  if (authStore.user?.roles === Roles.ASOCIACION || authStore.user?.roles === Roles.CLUB) {
+  if (authStore.user?.roles === Roles.ASOCIACION) {
 		window.location.href = '/admin/dashboard'
 		return;
 	}
@@ -55,19 +55,24 @@ onMounted(async () => {
   loadedSucursal.value = await triggerGetAllSucursals();
   isLoading.value = false;
 
-  isLoadingAlumnos.value = true;
-  loadedAlumnos.value = await triggerGetAllAlumnos();
-  isLoadingAlumnos.value = false;
+  
 
-  isLoadingClub.value = true;
-  loadedHorario.value = await triggerGetAllHorarioss();
-  isLoadingClub.value = false;
 
   //querySucursals();
   reassembleModel();
   //queryProvincias();
 });
+const onChangeSucursal = async () => {
+  isLoadingClub.value = true;
+  loadedHorario.value = await triggerGetAllHorarioss(asistenciaModel.value.idSucursal);
+  isLoadingClub.value = false;
 
+  isLoadingAlumnos.value = true;
+  loadedAlumnos.value = await triggerGetAllAlumnos(asistenciaModel.value.idSucursal);
+  isLoadingAlumnos.value = false;
+}
+// const onChangeAlumno = async () => {
+// }
 const reassembleModel = async () => {
   if (idAsistencia) {
     isCreating.value = true;
@@ -142,6 +147,13 @@ const formattedAlumnos = computed(() =>
         fullName: `${alumno.primerApellido} ${alumno.primerNombre}`,
       }))
     );
+    const formattedHorario = computed(() =>
+      loadedHorario.value.map((horario) => ({
+        ...horario,
+        fullHorario: `${horario.inicio} / ${horario.fin}`,
+      }))
+    );
+    
 </script>
 <template>
   <Toast />
@@ -155,48 +167,6 @@ const formattedAlumnos = computed(() =>
     <form>
       <section class="flex flex-col text-sm gap-2 mt-2 bg-white w-full my-2 rounded-lg shadow">
         <section class="flex flex-col gap-2 justify-center items-center">
-          
-          <div class="flex flex-col items-start">
-            <label for="idAlumno" class="block text-gray-600">Alumno</label>
-            <Dropdown
-              v-model="asistenciaModel.idAlumno"
-              ref="fullNameInputRef"
-              type="text"
-              id="idAlumno"
-              name="idAlumno"
-              class="w-[15rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500"
-              :options="formattedAlumnos"
-              optionLabel="fullName"
-              optionValue="id"
-              placeholder="Seleccione"
-            />
-          </div>
-          <div class="flex flex-col items-start">
-            <label for="idHorario" class="block text-gray-600">Horario</label>
-            <Dropdown
-              v-model="asistenciaModel.idHorario"
-              ref="fullNameInputRef"
-              type="text"
-              id="idHorario"
-              name="idHorario"
-              class="w-[15rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500"
-              :options="loadedHorario"
-              optionLabel="inicio"
-              optionValue="idHorario"
-              placeholder="Seleccione"
-            />
-          </div>
-          <div class="flex flex-col items-start">
-            <label for="fechaRegistro" class="block text-gray-600">Fecha Registro</label>
-            <DatePicker
-              showIcon
-              fluid
-              :showOnFocus="false"
-              inputId="buttondisplay"
-              class="w-[13rem]"
-              v-model="asistenciaModel.fechaRegistro"
-            />
-          </div>
           <div class="flex flex-col items-start">
             <label for="idSucursal" class="block text-gray-600">Sucursal</label>
             <Dropdown
@@ -210,8 +180,56 @@ const formattedAlumnos = computed(() =>
               optionLabel="nombreSucursal"
               optionValue="idSucursal"
               placeholder="Seleccione"
+              @update:modelValue="onChangeSucursal"
             />
           </div>
+          <div class="flex flex-col items-start">
+            <label for="idAlumno" class="block text-gray-600">Alumno</label>
+            <Dropdown
+              v-model="asistenciaModel.idAlumno"
+              ref="fullNameInputRef"
+              type="text"
+              id="idAlumno"
+              name="idAlumno"
+              class="w-[15rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500"
+              :options="formattedAlumnos"
+              optionLabel="fullName"
+              optionValue="id"
+              placeholder="Seleccione"
+              :disabled="!asistenciaModel.idSucursal"
+            />
+          </div>
+          
+          <div class="flex flex-col items-start">
+            <label for="idHorario" class="block text-gray-600">Horario</label>
+            <Dropdown
+              v-model="asistenciaModel.idHorario"
+              ref="fullNameInputRef"
+              type="text"
+              id="idHorario"
+              name="idHorario"
+              class="w-[15rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500"
+              :options="formattedHorario"
+              optionLabel="fullHorario"
+              optionValue="idHorario"
+              placeholder="Seleccione"
+              :disabled="!asistenciaModel.idSucursal"
+            />
+          </div>
+          <div class="flex flex-col items-start">
+            <label for="fechaRegistro" class="block text-gray-600">Fecha Registro</label>
+            
+            <DatePicker
+              showIcon
+              fluid
+              :showOnFocus="false"
+              inputId="buttondisplay"
+              class="w-[13rem]"
+              v-model="asistenciaModel.fechaRegistro"
+              :dateFormat="'dd/mm/yy'"
+            />
+          </div>
+         
           
           
         </section>

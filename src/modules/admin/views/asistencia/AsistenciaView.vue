@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FilterMatchMode } from '@primevue/core/api';
-import { Column, DataTable} from 'primevue';
+import { Column, DataTable, Dropdown, Tag} from 'primevue';
 import InputText from 'primevue/inputtext';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -36,6 +36,7 @@ const filters = ref({
   'alumno.primerNombre' : { value: null, matchMode: FilterMatchMode.CONTAINS },
   'alumno.primerApellido' : { value: null, matchMode: FilterMatchMode.CONTAINS },
   'alumno.cedulaAlumno' : { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'sucursals.nombreSucursal' : { value: null, matchMode: FilterMatchMode.EQUALS },
 });
 </script>
 <template>
@@ -123,7 +124,37 @@ const filters = ref({
         {{ Intl.DateTimeFormat('es-EC').format(new Date(slotProps.data.fechaRegistro)) }}
       </template>
     </Column>
-
+    <Column
+    field="sucursals.nombreSucursal"
+    header="Sucursal"
+    sortable
+    :showFilterMenu="false"
+    v-if="[Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR, Roles.CLUB].includes(authStore.user?.roles as Roles,)">
+    <template #filter="{ filterModel, filterCallback }">
+        <Dropdown
+          v-if="[Roles.ADMIN, Roles.CLUB].includes(authStore.user?.roles as Roles,)"
+          v-model="filterModel.value"
+          @change="filterCallback()"
+          :options="
+            loadedAsistencia
+              ?.map((x) => x.sucursals?.nombreSucursal || '')
+              .filter((value, index, self) => value && self.indexOf(value) === index) || []
+          "
+          :showClear="true"
+          placeholder="Seleccione"
+          class="p-column-filter"
+        >
+          <template #option="slotProps">
+            <Tag :value="slotProps.option" />
+          </template>
+        </Dropdown>
+      </template>
+      <template #body="slotProps">
+        <p class="capitalize">
+          {{ slotProps.data.sucursals?.nombreSucursal || 'Sin Sucursal' }}
+        </p>
+      </template>
+    </Column>
    
   </DataTable>
 </div>

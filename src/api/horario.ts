@@ -9,15 +9,20 @@ export interface Horarios {
     idSucursal: number,
     inicio: Date | undefined,
     fin: Date | undefined,
+    sucursals?: any,
+    nombreSucursal?: string
 }
 
 export const triggerGetAllHorarioss = async (
-  
+  idSucursal?: number | ''
 ): Promise<Horarios[]> => {
   const output = await makeRequest<any>(
-    `${VITE_APP_API_URL}/horarios`
+    `${VITE_APP_API_URL}/horarios?q=${idSucursal}`
   )
-  return output ?? []
+  return output.map((horario: any) => ({
+    ...horario,
+    sucursals: horario.sucursals || [], 
+  }));
 }
 export const triggerGetHorarioById = async (
   idHorario: number

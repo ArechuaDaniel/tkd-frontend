@@ -6,28 +6,26 @@ import type { Sucursals } from "./sucursal";
 
 const { VITE_APP_API_URL } = import.meta.env
 
-export interface Alumnos {
-  id: number,
-  idClub: number,
-  idSucursal: number,
+export interface Usuario {
+  idUsuario: number,
+  email: string,
+  cedula: string,
   primerApellido: string,
   segundoApellido?: string,
   primerNombre: string,
   segundoNombre?: string,
-  cedulaAlumno: string,
-  fechaIngreso?: Date,
-  telefono?: string | undefined,
-  direccion?: string,
   fechaNacimiento?: Date,
-  email?: string,
-  isActive?: boolean,
+  telefono?: string,
   genero?: string,
   tipoSangre?: string,
-  nombreClub?: string,
-  nombreSucursal?: string,
-  ocupacion?: string,
+  isActive?: boolean,
+  roles: string,
+  idClub?: number,
+  idSucursal?: number,
+  idAsociacion?: number,
   clubs?: any,
   sucursals?: any,
+  asociacions?: any
 }
 
 // export const triggerGetAllAlumnos = async (
@@ -38,10 +36,10 @@ export interface Alumnos {
 //   )
 //   return output  ? {...output , clubs: output.clubs} : [] 
 // }
-export const triggerGetAllAlumnos = async (idSucursal?: number | ''): Promise<Alumnos[] > => {
+export const triggerGetAllUsuario = async (): Promise<Usuario[] > => {
   try {
-    const output = await makeRequest<Alumnos[]>(
-      `${VITE_APP_API_URL}/alumnos?q=${idSucursal}`
+    const output = await makeRequest<Usuario[]>(
+      `${VITE_APP_API_URL}/auth/users`
     );
     if (!output || !Array.isArray(output)) {
       console.error("Respuesta inesperada de la API", output);
@@ -49,37 +47,38 @@ export const triggerGetAllAlumnos = async (idSucursal?: number | ''): Promise<Al
     }
 
     // Devuelve directamente la lista de alumnos si es válida.
-    return output.map((alumno) => ({
-      ...alumno,
-      clubs: alumno.clubs || [], // Asegura que `clubs` siempre sea un array.
-      sucursals: alumno.sucursals || [],
+    return output.map((user) => ({
+      ...user,
+      clubs: user.clubs || [], // Asegura que `clubs` siempre sea un array.
+      sucursals: user.sucursals || [],
+      asociacions: user.asociacions || [],
     }));
   } catch (error) {
-    console.error("Error obteniendo alumnos", error);
+    console.error("Error obteniendo usuario", error);
     return [];
   }
 };
-export const triggerGetAlumnoById = async (
-  id: number
-): Promise<Alumnos|null> => {
+export const triggerGetUserById = async (
+  idUsuario: number
+): Promise<Usuario|null> => {
   const output = await makeRequest<any>(
-    `${VITE_APP_API_URL}/alumnos/${id}`
+    `${VITE_APP_API_URL}/auth/users/${idUsuario}`
   )
   return output ?? []
 }
-export const triggerAlumnosSave = async (alumnos: Alumnos): Promise<Alumnos|null> => {
+export const triggerUsuarioave = async (usuario: Usuario): Promise<Usuario|null> => {
 	const output = await makeRequest<any>(
-		`${VITE_APP_API_URL}/alumnos`,
+		`${VITE_APP_API_URL}/auth/register`,
 		'POST',
-		alumnos
+    usuario
 	);
   console.log(output);
   
 	return output ? output : null;
 }
-export const triggerAlumnoRemove = async (id:number): Promise<boolean> => {
+export const triggerUserRemove = async (idUsuario:number): Promise<boolean> => {
 	const output = await makeRequest<any>(
-		`${VITE_APP_API_URL}/alumnos/${id}`,
+		`${VITE_APP_API_URL}/users/${idUsuario}`,
 		'DELETE'
 	);
 
