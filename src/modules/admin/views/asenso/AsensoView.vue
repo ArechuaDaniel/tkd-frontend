@@ -39,6 +39,21 @@ const filters = ref({
   'alumno.cedulaAlumno' : { value: null, matchMode: FilterMatchMode.CONTAINS },
   'sucursal.nombreSucursal' : { value: null, matchMode: FilterMatchMode.EQUALS },
 });
+const getColorClass= (color: string) => {
+      // Retorna la clase CSS correspondiente al color
+      if (color === 'black') {
+        return 'h-[1rem] bg-black';
+      }
+      if (color === 'green') {
+        return 'h-[1rem] bg-green-500';
+      }
+      if (color === 'yellow') {
+        return 'h-[1rem] bg-yellow-500';
+      }
+      return `h-[1rem] bg-${color}-500`;
+}
+  
+
 </script>
 <template>
   <NotAllowed v-if="!allowedRoles.includes(authStore.user?.roles as Roles)" />
@@ -84,34 +99,49 @@ const filters = ref({
     </Column>
     <Column field="cinturon.color" header="Color">
       <template #body="slotProps">
+        <div class="w-[4rem] border border-gray-600">
+          <div v-if="slotProps.data.cinturon.color2">
+            <!-- Con dos colores -->
+            <p :class="getColorClass(slotProps.data.cinturon.color)"></p>
+            <p :class="getColorClass(slotProps.data.cinturon.color2)"></p>
+          </div>
+          <div v-else>
+            <!-- Con un solo color -->
+            <p :class="getColorClass(slotProps.data.cinturon.color)"></p>
+            <p :class="getColorClass(slotProps.data.cinturon.color)"></p>
+          </div>
+        </div>
+      </template>
+    </Column>
+    <!-- <Column field="cinturon.color" header="Color">
+      <template #body="slotProps">
         <div v-if="!slotProps.data.cinturon.color2" class="w-[4rem] border border-gray-600 ">
-          <div v-if="slotProps.data.cinturon.color == 'black'">
+          <div v-if="slotProps.data.cinturon.color === 'black'">
             <p class="h-[1rem] bg-black">
               .
             </p>
             <p class="h-[1rem] bg-black">.</p>
           </div>
           <div v-if="slotProps.data.cinturon.color !== 'black'">
-            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color +'-500']">
+            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color + '-500']">
               .
             </p>
-            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color +'-500']">
+            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color + '-500']">
               .
             </p>
           </div>
         </div>
-
         <div v-if="slotProps.data.cinturon.color2" class="w-[4rem] border border-gray-600 ">
           <div v-if="slotProps.data.cinturon.color2 === 'black'">
-            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color +'-500']">
+            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color + '-500']">
               .
             </p>
             <p class="h-[1rem] bg-black">
               .
             </p>
           </div>
-          <div v-if="slotProps.data.cinturon.color2 !== 'black'">
-            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color +'-500']">
+          <div v-else>
+            <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color + '-500']">
               .
             </p>
             <p :class="['h-[1rem] bg-' + slotProps.data.cinturon.color2 +'-500']">
@@ -122,6 +152,7 @@ const filters = ref({
        
       </template>
     </Column>
+     -->
     <Column field="cinturon.asensoColor" header="Cinturon" sortable></Column>
     <Column field="alumno.cedulaAlumno" header="Cédula" sortable :showFilterMenu="false">
       <template #filter="{ filterModel, filterCallback }">

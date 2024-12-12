@@ -92,6 +92,7 @@ const reassembleModel = async () => {
       asensoModel.value.idAlumno = asenso.idAlumno;
       asensoModel.value.idCinturon = asenso.idCinturon;
     }
+    onChangeSucursal();
     isCreating.value = false;
   }
 };
@@ -233,7 +234,7 @@ const formattedAlumnos = computed(() =>
             />
           </div>
           <div class="flex flex-col items-start">
-            <label for="fechaRegistro" class="block text-gray-600">Fecha Asenso</label>
+            <label for="fechaAsenso" class="block text-gray-600">Fecha Asenso</label>
             <DatePicker
               showIcon
               fluid

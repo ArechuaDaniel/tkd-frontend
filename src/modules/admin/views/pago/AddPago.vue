@@ -85,6 +85,7 @@ const reassembleModel = async () => {
       pagoModel.value.comprobante = pago.comprobante;
       pagoModel.value.formaPago = pago.formaPago;
     }
+    onChangeSucursal();
     isCreating.value = false;
   }
 };

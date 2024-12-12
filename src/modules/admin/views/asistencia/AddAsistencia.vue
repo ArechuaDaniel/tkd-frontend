@@ -84,6 +84,7 @@ const reassembleModel = async () => {
       asistenciaModel.value.idAsistencia = asistencia.idAsistencia;
       asistenciaModel.value.idAlumno = asistencia.idAlumno;
     }
+    onChangeSucursal();
     isCreating.value = false;
   }
 };
