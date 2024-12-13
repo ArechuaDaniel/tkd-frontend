@@ -12,6 +12,8 @@ import { ref } from 'vue';
 const authStore = useAuthStore();
 const router = useRouter();
 const { user } = storeToRefs(useAuthStore());
+const isVisible = ref(true);
+const isVisible2 = ref(false);
 const props = defineProps({
 	activeMenu: {
 		type: String,
@@ -42,13 +44,13 @@ const menuOptions: Option[] = [
 		text: "Club",
 		icon: "pi pi-warehouse mr-2 ",
 		link: RouteNames.clubView,
-		roles: [Roles.ADMIN,Roles.ASOCIACION],
+		roles: [Roles.ADMIN,Roles.ASOCIACION, Roles.CLUB],
 	},
     {
 		text: "Sucursal",
 		icon: "pi pi-warehouse mr-2 ",
 		link: RouteNames.sucursalView,
-		roles: [Roles.ADMIN,Roles.CLUB],
+		roles: [Roles.ADMIN,Roles.CLUB, Roles.SUCURSAL],
 	},
     {
 		text: "Alumnos",
@@ -85,7 +87,7 @@ const settingOptions: Option[] = [
 	{
 		text: "Perfil",
 		icon: "pi pi-user mr-2 ",
-		link: RouteNames.home,
+		link: RouteNames.perfilView,
 		roles: [Roles.ADMIN,Roles.ASOCIACION, Roles.CLUB, Roles.SUCURSAL, Roles.INSTRUCTOR],
 	},
     {
@@ -149,6 +151,7 @@ const cerrarSesion = async () => {
                   <ul class="list-none p-4 m-0">
                       <li>
                           <div
+                            @click="isVisible = !isVisible"
                               v-styleclass="{
                                   selector: '@next',
                                   enterFromClass: 'hidden',
@@ -161,20 +164,23 @@ const cerrarSesion = async () => {
                               <span class="font-medium text-white">APLICACIÓN</span>
                               <i class="pi pi-chevron-down text-white" />
                           </div>
-                          <ul class="list-none p-0 m-0 overflow-hidden" v-for="option in menuOptions"   >
-                                <li v-if="option.roles.includes(authStore.user!.roles as Roles)"  :key="option.text">
-                                    <SidebarButton
-                                        :class="'rounded-xl flex items-center cursor-pointer p-4 text-white  dark:text-surface-100 border-2 border-transparent hover:bg-sky-700 hover:border-gray-700 dark:hover:border-surface-500 duration-150 transition-colors' + (option.link === router.currentRoute.value.name ? ' bg-sky-600 border-gray-600 dark:border-surface-500' : '')"
-                                        @click="router.push({ name: option.link })"
-                                        :active="props.activeMenu === option.link"
-                                        :text="option.text"
+                          <div v-show="isVisible" class="content">
+
+                              <ul class="list-none p-0 m-0 overflow-hidden" v-for="option in menuOptions"   >
+                                  <li v-if="option.roles.includes(authStore.user!.roles as Roles)"  :key="option.text">
+                                      <SidebarButton
+                                      :class="'rounded-xl flex items-center cursor-pointer p-4 text-white  dark:text-surface-100 border-2 border-transparent hover:bg-sky-700 hover:border-gray-700 dark:hover:border-surface-500 duration-150 transition-colors' + (option.link === router.currentRoute.value.name ? ' bg-sky-600 border-gray-600 dark:border-surface-500' : '')"
+                                      @click="router.push({ name: option.link })"
+                                      :active="props.activeMenu === option.link"
+                                      :text="option.text"
                                         :icon="option.icon"
                                     >
                                         <!-- <i :class="[option.icon]" />
                                         <span class="font-medium">{{ option.text }}</span> -->
                                     </SidebarButton>
                                 </li>
-                          </ul>
+                            </ul>
+                        </div>
                       </li>
                   </ul>
                   
@@ -183,6 +189,7 @@ const cerrarSesion = async () => {
                   <ul class="list-none p-4 m-0">
                         <li>
                             <div
+                                @click="isVisible2 = !isVisible2"
                                 v-styleclass="{
                                     selector: '@next',
                                     enterFromClass: 'hidden',
@@ -195,6 +202,7 @@ const cerrarSesion = async () => {
                                 <span class="font-medium">CONFIGURACIÓN</span>
                                 <i class="pi pi-chevron-down" />
                             </div>
+                            <div v-show="isVisible2" class="content">
                             <ul class="list-none p-0 m-0 overflow-hidden" v-for="option in settingOptions"   >
                                 <li v-if="option.roles.includes(authStore.user!.roles as Roles)"  :key="option.text">
                                     <SidebarButton
@@ -215,12 +223,13 @@ const cerrarSesion = async () => {
                                         @click="cerrarSesion()"
                                         class="rounded-xl flex items-center cursor-pointer p-4 border-2 border-transparent hover:border-surface-300 dark:hover:border-surface-500 hover:bg-gray-700 w-full text-white dark:text-surface-100 duration-150 transition-colors"
                                     >
-                                        <i class="pi pi-sign-out mr-2 text-cyan-500" />
+                                        <i class="pi pi-sign-out mr-2 text-red-500" />
                                         <span class="font-medium">Cerrar Sesión</span>
                                     </button>
                                 </li>
                                 
                             </ul>
+                        </div>
                         </li>
                     </ul>
 
@@ -230,7 +239,7 @@ const cerrarSesion = async () => {
                   <div
                       class="rounded-xl m-4 flex items-center cursor-pointer p-4 text-surface-700 dark:text-surface-100 border-2 border-transparent hover:border-surface-300 dark:hover:border-surface-500 duration-150 transition-colors "
                   >
-                      <img src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/render/image/public/block.images/blocks/avatars/circle/avatar-f-1.png" class="mr-2 w-7 h-7" />
+                      <i class="pi pi-user mr-2 bg-white p-2 rounded-full "></i>
                       <div class="flex flex-col  justify-center ">
                           <span class="font-medium text-white capitalize text-sm">{{ user?.roles + ' : ' + user?.primerNombre + ' ' + user?.primerApellido }}</span>
                     </div>
@@ -273,7 +282,7 @@ const cerrarSesion = async () => {
               >
                   <li class="border-t border-surface lg:border-t-0 ml-auto">
                       <a class="flex p-4 lg:px-4 lg:py-2 items-center hover:bg-surface-100 dark:hover:bg-surface-700 font-medium rounded-border cursor-pointer duration-150 transition-colors">
-                          <img src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/render/image/public/block.images/blocks/avatars/circle/avatar-f-1.png" class="mr-4 lg:mr-0 w-8 h-8" />
+                          <<i class="pi pi-user mr-2 bg-white p-2 rounded-full "></i>
                           <div class="block lg:hidden">
                               <div class="text-white dark:text-surface-0 text-xs">{{ user?.primerNombre + ' ' + user?.primerApellido }}</div>
                               
@@ -282,8 +291,8 @@ const cerrarSesion = async () => {
                   </li>
               </ul>
           </div>
-          <div class="p-8 flex flex-col flex-autofull w- max-h-full overflow-y-auto ">
-              <div class="border-2 border-dashed border-surface rounded-border bg-surface-0 dark:bg-surface-950 flex-auto" >  
+          <div class="p-8 flex flex-col flex-autofull w-full h-full bg-gray-200 overflow-auto ">
+              <div class="p-4 border-2 border-dashed border-surface rounded-border bg-gray-50 dark:bg-surface-950  w-full h-full overflow-auto" >  
               <RouterView />
               </div>
           </div>

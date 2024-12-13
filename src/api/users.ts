@@ -7,6 +7,7 @@ import type { Sucursals } from "./sucursal";
 const { VITE_APP_API_URL } = import.meta.env
 
 export interface Usuario {
+  password?: string | undefined,
   idUsuario: number,
   email: string,
   cedula: string,
@@ -68,13 +69,21 @@ export const triggerGetUserById = async (
   )
   return output ?? []
 }
+export const triggerGetUserByIdUser = async (
+ 
+): Promise<Usuario|null> => {
+  const output = await makeRequest<any>(
+    `${VITE_APP_API_URL}/auth/user/id`
+  )
+  return output ?? []
+}
 export const triggerUsuarioSave = async (usuario: Usuario): Promise<Usuario|null> => {
 	const output = await makeRequest<any>(
 		`${VITE_APP_API_URL}/auth/register`,
 		'POST',
     usuario
 	);
-  console.log(output);
+  
   
 	return output ? output : null;
 }

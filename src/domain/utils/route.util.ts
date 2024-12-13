@@ -30,5 +30,8 @@ export enum RouteNames {
 	addUserView = 'adUserView',
 	editUserView = 'editUserView',
 
+	perfilView = 'perfilView',
+	editPerfilView = 'editPerfilView',
+
 	nullRoute = ''
 };

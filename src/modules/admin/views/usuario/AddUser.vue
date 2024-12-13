@@ -55,7 +55,7 @@ const loadedSucursales = ref<Sucursals[]>([]);
 const isLoadingSucursales = ref(false);
 
 const isCreating = ref(false);
-
+const password2 = ref<string>('');
 const usersModel = ref<Usuario>({
   idUsuario: 0,
   idClub: 0,
@@ -74,6 +74,7 @@ const usersModel = ref<Usuario>({
   genero: '',
   tipoSangre: '',
   roles: '',
+  password: '',
 });
 
 onMounted(async () => {
@@ -88,6 +89,7 @@ onMounted(async () => {
   isLoading.value = false;
 
   //querySucursals();
+  queryAsociaciones();
   reassembleModel();
   //queryProvincias();
 });
@@ -125,7 +127,7 @@ const reassembleModel = async () => {
       usersModel.value.idClub = users.idClub;
       usersModel.value.idSucursal = users.idSucursal;
       usersModel.value.roles = users.roles;
-      await queryAsociaciones();
+     //await queryAsociaciones();
       await querySucursals();
       
     }
@@ -134,6 +136,14 @@ const reassembleModel = async () => {
 };
 const startSaving = async () => {
   isCreating.value = true;
+  if (password2.value !== usersModel.value.password ) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Las contraseñas no coinciden',
+      life: 3000,
+    })
+  }
   const result = await triggerUsuarioSave({
     ...usersModel.value,
   });
@@ -202,7 +212,7 @@ const statusOptions = ref([
 ])
 const getRoles = () => {
   if (authStore.user?.roles === Roles.ADMIN) {
-    return ['amdin', 'sucursal', 'instructor', 'club', 'asociacion'];
+    return [ 'sucursal', 'instructor', 'club', 'asociacion'];
   }
   if (authStore.user?.roles === Roles.SUCURSAL) {
     return ['instructor'];
@@ -241,7 +251,7 @@ const rolesOptions = computed(() => {
   <ConfirmDialog></ConfirmDialog>
   <div class="p-4 overflow-auto h-full w-full">
   <div class="flex md:flex-row flex-col justify-between items-center">
-    <h1 class="text-3xl font-bold">{{ idUsuario ? 'Editar' : 'Agregar' }} Usuario</h1>
+    <h1 class="text-3xl font-bold">Agregar Usuario</h1>
   </div>
   <div class="p-4">
     <form>
@@ -255,7 +265,8 @@ const rolesOptions = computed(() => {
               id="cedula"
               name="cedula"
               class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-              autocomplete="off"
+              maxlength="10"
+              @input="usersModel.cedula = usersModel.cedula?.replace(/\D/g, '')"
             >
             </InputText>
           </div>
@@ -269,7 +280,7 @@ const rolesOptions = computed(() => {
               id="primerApellido"
               name="primerApellido"
               class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-              autocomplete="off"
+              
             />
           </div>
           <div class="flex flex-col items-start">
@@ -280,7 +291,7 @@ const rolesOptions = computed(() => {
               id="segundoApellido"
               name="segundoApellido"
               class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-              autocomplete="off"
+              
             />
           </div>
           <div class="flex flex-col items-start">
@@ -291,7 +302,7 @@ const rolesOptions = computed(() => {
               id="primerNombre"
               name="primerNombre"
               class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-              autocomplete="off"
+              
             />
           </div>
           <div class="flex flex-col items-start">
@@ -302,7 +313,7 @@ const rolesOptions = computed(() => {
               id="segundoNombre"
               name="segundoNombre"
               class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-              autocomplete="off"
+              
             />
           </div>
           <hr  class="h-[1px] w-full" />
@@ -331,18 +342,17 @@ const rolesOptions = computed(() => {
             </Dropdown>
           </div>
           <div class="flex flex-col items-start">
-            <label class="block text-gray-600" for="email">Correo</label>
+            <label class="block text-gray-600" for="Direccion">Dirección</label>
             <InputText
-              v-model="usersModel.email"
-              id="email"
-              name="email"
+              v-model="usersModel.direccion"
+              id="direccion"
+              name="direccion"
               class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-              optionLabel="email"
-              optionValue="id"
             >
             </InputText>
             <!-- <small class="text-red-800">{{ validator.idaprobador }}</small> -->
           </div>
+          
           <div class="flex flex-col items-start">
             <label for="fechaNacimiento" class="block text-gray-600">Fecha Nacimiento</label>
             <DatePicker
@@ -359,16 +369,50 @@ const rolesOptions = computed(() => {
           <hr  class="h-[1px] w-full" />
           
           <div class="flex flex-col items-start">
-            <label class="block text-gray-600" for="Direccion">Dirección</label>
+            <label class="block text-gray-600" for="email">Correo</label>
             <InputText
-              v-model="usersModel.direccion"
-              id="direccion"
-              name="direccion"
+              v-model="usersModel.email"
+              id="email"
+              name="email"
               class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+              optionLabel="email"
+              optionValue="id"
             >
             </InputText>
             <!-- <small class="text-red-800">{{ validator.idaprobador }}</small> -->
           </div>
+          <section class="flex flex-row flex-wrap gap-2 justify-between" v-if="!usersModel.idUsuario">
+
+            <div class="flex flex-col items-start">
+              <label class="block text-gray-600" for="password">Constraseña</label>
+              <InputText
+              v-model="usersModel.password"
+              type="password"
+              id="password"
+              name="password"
+              class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+              optionLabel="password"
+              optionValue="id"
+            >
+            </InputText>
+            <!-- <small class="text-red-800">{{ validator.idaprobador }}</small> -->
+          </div>
+          
+          <div class="flex flex-col items-start">
+            <label class="block text-gray-600" for="password2">Repetir Constraseña</label>
+            <InputText
+              v-model="password2"
+              type="password"
+              id="password2"
+              name="password2"
+              class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+              optionLabel="password2"
+              optionValue="id"
+            >
+          </InputText>
+          <!-- <small class="text-red-800">{{ validator.idaprobador }}</small> -->
+        </div>
+      </section>
 
           <hr  class="h-[1px] w-full" />
           
@@ -468,13 +512,17 @@ const rolesOptions = computed(() => {
               placeholder="Seleccione"
             />
           </div>
+          {{ usersModel }}
         </section>
       </section>
     </form>
-    <div class="flex flex-row justify-end w-full h-full">
-      <div class="flex md:flex-row flex-col justify-between md:w-1/2 w-full p-8">
-        <button
-          v-if="usersModel.idUsuario"
+    <div class="flex flex-row justify-end w-full h-full"
+    >
+    <div class="flex md:flex-row flex-col justify-between md:w-1/2 w-full p-8"
+    >
+    <button
+      v-if="[Roles.ADMIN, Roles.SUCURSAL, Roles.CLUB, Roles.ASOCIACION].includes(authStore.user?.roles as Roles, ) && usersModel.idUsuario"
+          
           @click="startRemoving()"
           class="p-3 hover:bg-red-800 bg-red-500 rounded text-white flex items-center md:w-28"
         >

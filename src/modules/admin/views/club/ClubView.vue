@@ -17,7 +17,7 @@ const loadedClubs = ref<Clubs[]>([]);
 const isLoading = ref(false);
 
 onMounted(async () => {
-  if (authStore.user?.roles === Roles.SUCURSAL || authStore.user?.roles === Roles.INSTRUCTOR || authStore.user?.roles === Roles.CLUB ) {
+  if (authStore.user?.roles === Roles.SUCURSAL || authStore.user?.roles === Roles.INSTRUCTOR  ) {
 		window.location.href = '/admin/dashboard'
 		return;
 	}
@@ -37,6 +37,7 @@ const filters = ref({
   <div class="flex justify-end items-end">
     <label for="" class="w-full">&nbsp;</label>
     <RouterLink
+      v-if="authStore.user?.roles === Roles.ADMIN || authStore.user?.roles === Roles.ASOCIACION"
       v-tooltip="'Añadir una nuevo Club'"
       class="min-w-[100px] bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-400"
       :to="{ name: RouteNames.addClubView }"

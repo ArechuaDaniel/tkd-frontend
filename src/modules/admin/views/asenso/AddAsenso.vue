@@ -45,7 +45,7 @@ const isLoadingCinturon = ref(false);
 const asensoModel = ref<Asenso>({
     idSucursal: 0,
     idClub: 0,
-    fechaAsenso: undefined,
+    fechaAsenso: new Date(),
     idAlumno: 0,
     idAsenso: 0,
     idCinturon: 0,

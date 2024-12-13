@@ -7,4 +7,13 @@ export interface User {
     segundoApellido?: string;
     isActive?: boolean;
     roles: string;
+    cedula: string;
+    fechaNacimiento?: Date;
+    telefono?: string;
+    genero?: string;
+    direccion?: string;
+    idAsociacion?: number;
+    idClub?: number;
+    idSucursal?: number;
+    tipoSangre?: string;
   }

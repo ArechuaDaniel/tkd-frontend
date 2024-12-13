@@ -147,9 +147,14 @@ export const adminRoutes : RouteRecordRaw = {
             component: () => import('../views/usuario/AddUser.vue')
         },
         {
+            path: 'perfil',
+            name: RouteNames.perfilView, 
+            component: () => import('../views/usuario/PerfilUser.vue')
+        },
+        {
             path: 'usuario/editar/:id',
-            name: RouteNames.editUserView, 
-            component: () => import('../views/usuario/AddUser.vue')
+            name: RouteNames.editPerfilView, 
+            component: () => import('../views/usuario/EditUser.vue')
         },
         {
             path: 'products/:productId',

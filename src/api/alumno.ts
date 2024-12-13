@@ -73,7 +73,7 @@ export const triggerAlumnosSave = async (alumnos: Alumnos): Promise<Alumnos|null
 		'POST',
 		alumnos
 	);
-  console.log(output);
+  
   
 	return output ? output : null;
 }

@@ -17,6 +17,7 @@ import { useAuthStore } from '@/modules/auth/stores/auth.store';
 import { triggerGetAllHorarioss, triggerGetHorarioById, triggerHorarioRemove, triggerHorarioSave, type Horarios } from '@/api/horario';
 import { triggerAsistenciaRemove, triggerAsistenciaSave, triggerGetAsistenciaById, type Asistencia } from '@/api/asistencia';
 import { triggerGetAllAlumnos, type Alumnos } from '@/api/alumno';
+//import { transformDateToString } from '@/domain/utils/date.util';
 
 const allowedRoles = [Roles.SUCURSAL,Roles.INSTRUCTOR, Roles.ADMIN, Roles.CLUB];
 const authStore = useAuthStore()
@@ -85,6 +86,7 @@ const reassembleModel = async () => {
       asistenciaModel.value.idAlumno = asistencia.idAlumno;
     }
     onChangeSucursal();
+
     isCreating.value = false;
   }
 };
@@ -142,6 +144,8 @@ const startRemoving = async () => {
     reject: () => {},
   });
 };
+
+
 const formattedAlumnos = computed(() =>
       loadedAlumnos.value.map((alumno) => ({
         ...alumno,
@@ -227,7 +231,8 @@ const formattedAlumnos = computed(() =>
               inputId="buttondisplay"
               class="w-[13rem]"
               v-model="asistenciaModel.fechaRegistro"
-              :dateFormat="'dd/mm/yy'"
+              placeholder="Selecciona una fecha"
+              :dateFormat="'dd-mm-yy'.split('T')[0]"
             />
           </div>
          

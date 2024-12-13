@@ -13,6 +13,7 @@ import { triggerAsociacionRemove, triggerAsociacionSave, triggerGetAllAsociacion
 import { triggerClubRemove, triggerClubSave, triggerGetClubById, type Clubs } from '@/api/club';
 import { Roles } from '@/domain/entities/Roles';
 import { useAuthStore } from '@/modules/auth/stores/auth.store';
+import { u } from 'node_modules/@tanstack/vue-query/build/modern/queryClient-C5JH3kKW';
 
 const authStore = useAuthStore()
 const router = useRouter();
@@ -75,7 +76,7 @@ const startSaving = async () => {
   const result = await triggerClubSave({
     ...clubModel.value,
   });
-  console.log(result);
+  
   isCreating.value = false;
   
   if (result) {
@@ -262,7 +263,7 @@ const statusOptions = ref([
     <div class="flex flex-row justify-end w-full h-full">
       <div class="flex md:flex-row flex-col justify-between md:w-1/2 w-full p-8">
         <button
-          v-if="clubModel.idClub"
+          v-if="clubModel.idClub &&( (authStore.user?.roles === Roles.ASOCIACION) || (authStore.user?.roles === Roles.ADMIN))"
           @click="startRemoving()"
           class="p-3 hover:bg-red-800 bg-red-500 rounded text-white flex items-center md:w-28"
         >

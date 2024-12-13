@@ -71,7 +71,7 @@ export const makeRequest = async <T>(url: string, method: string = 'GET', body?:
 
 		VsToast.show({
 			title: 'Ha ocurrido un error',
-			message: (message ?? 'Error desconocido. Contacte con TI.'),
+			message: (message ? 'Error desconocido. Contacte con TI.' : 'Hubo un error'),
 			variant: 'error',
 		});
 

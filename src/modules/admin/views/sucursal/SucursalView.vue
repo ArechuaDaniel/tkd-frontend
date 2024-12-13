@@ -41,6 +41,7 @@ const filters = ref({
     <div class="flex justify-end items-end">
       <label for="" class="w-full">&nbsp;</label>
       <RouterLink
+      v-if="authStore.user?.roles === Roles.ADMIN || authStore.user?.roles === Roles.CLUB"
       v-tooltip="'Añadir una nueva Sucursal'"
       class="min-w-[100px] bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-400"
       :to="{ name: RouteNames.addSucursalView }"

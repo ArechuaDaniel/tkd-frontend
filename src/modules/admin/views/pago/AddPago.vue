@@ -41,7 +41,7 @@ const isLoadingAlumnos = ref(false);
 const pagoModel = ref<Pago>({
     idSucursal: 0,
     valor: 0,
-    fechaPago: undefined,
+    fechaPago: new Date(),
     idAlumno: 0,
     idPago: 0,
     mesPago: '',

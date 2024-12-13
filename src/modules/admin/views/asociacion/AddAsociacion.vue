@@ -65,7 +65,7 @@ const startSaving = async () => {
   const result = await triggerAsociacionSave({
     ...asociacionModel.value,
   });
-  console.log(result);
+  
   isCreating.value = false;
   
   if (result) {

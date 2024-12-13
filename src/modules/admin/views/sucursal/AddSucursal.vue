@@ -33,7 +33,7 @@ const sucursalModel = ref<Sucursals>({
     idClub: 0,
     nombre: '',
     nombreSucursal: '',
-    fechaCreacion: undefined,
+    fechaCreacion: new Date(),
     telefono: '',
     direccion: '',
     isActive: true
@@ -156,7 +156,7 @@ const statusOptions = ref([
             />
           </div>
           <div class="flex flex-col items-start">
-            <label for="nombre" class="block text-gray-600">Nombre</label>
+            <label for="nombre" class="block text-gray-600">Nombre Representante</label>
             <InputText
               v-model="sucursalModel.nombre"
               type="text"
@@ -225,6 +225,7 @@ const statusOptions = ref([
           <div class="flex flex-col items-start">
             <label for="isActive" class="block text-gray-600">Active</label>
             <Dropdown
+            :disabled="(authStore.user?.roles === Roles.SUCURSAL)"
               v-model="sucursalModel.isActive"
               ref="fullNameInputRef"
               type="text"
@@ -244,7 +245,7 @@ const statusOptions = ref([
     <div class="flex flex-row justify-end w-full h-full">
       <div class="flex md:flex-row flex-col justify-between md:w-1/2 w-full p-8">
         <button
-          v-if="sucursalModel.idSucursal"
+          v-if="sucursalModel.idClub &&( (authStore.user?.roles === Roles.CLUB) || (authStore.user?.roles === Roles.ADMIN))"
           @click="startRemoving()"
           class="p-3 hover:bg-red-800 bg-red-500 rounded text-white flex items-center md:w-28"
         >
