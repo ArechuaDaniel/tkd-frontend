@@ -32,10 +32,10 @@ const filters = ref({
   primerNombre: { value: null, matchMode: FilterMatchMode.CONTAINS },
   primerApellido: { value: null, matchMode: FilterMatchMode.CONTAINS },
   genero: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  'sucursals.nombreSucursal': { value: null, matchMode: FilterMatchMode.CONTAINS },
-  idClub: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  'clubs.nombreClub': { value: null, matchMode: FilterMatchMode.CONTAINS },
-  'asociacions.asociacion': { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'sucursals.nombreSucursal': { value: null, matchMode: FilterMatchMode.EQUALS },
+  idClub: { value: null, matchMode: FilterMatchMode.EQUALS },
+  'clubs.nombreClub': { value: null, matchMode: FilterMatchMode.EQUALS },
+  'asociacions.asociacion': { value: null, matchMode: FilterMatchMode.EQUALS },
   //centrocos: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
 });
 const calcularEdad = (fechaNacimiento: any) => {
@@ -61,19 +61,14 @@ const calcularEdad = (fechaNacimiento: any) => {
   <h1 class="text-3xl font-bold">Datos de Usuarios</h1>
   <div class="flex justify-end items-end">
     <label for="" class="w-full">&nbsp;</label>
-    <!-- <RouterLink
-      v-if="
-        [Roles.ADMIN, Roles.SUCURSAL, Roles.ASOCIACION, Roles.CLUB].includes(
-          authStore.user?.roles as Roles,
-        )
-      "
+    <RouterLink
       v-tooltip="'Añadir un nuevo usuario'"
       class="min-w-[100px] bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-400"
-      :to="{ name: RouteNames.editUserView }"
-      aria-label="Añadir un nuevo Usuario"
-    >
+      :to="{ name: RouteNames.addUserView}"
+      aria-label="Añadir un nuevo usuario"
+      >
       <i class="pi pi-plus"></i>&nbsp; Agregar
-    </RouterLink> -->
+    </RouterLink>
   </div>
   <div class="overflow-x-auto w-full">
     <DataTable
@@ -88,7 +83,7 @@ const calcularEdad = (fechaNacimiento: any) => {
     v-model:selection="filters"
   >
     <Column field="idUsuario" header="Acción"
-      v-if="[Roles.ADMIN, Roles.SUCURSAL, Roles.INSTRUCTOR, Roles.CLUB].includes(authStore.user?.roles as Roles,)"
+      v-if="[Roles.ADMIN, Roles.SUCURSAL, Roles.ASOCIACION, Roles.CLUB].includes(authStore.user?.roles as Roles,)"
     >
       <template #body="slotProps">
         <RouterLink
@@ -170,7 +165,7 @@ const calcularEdad = (fechaNacimiento: any) => {
     <Column field="asociacions.asociacion" header="Asociación" sortable :showFilterMenu="false">
       <template #filter="{ filterModel, filterCallback }">
         <Dropdown
-          v-if="[Roles.ADMIN, Roles.ASOCIACION].includes(authStore.user?.roles as Roles)"
+          v-if="[Roles.ADMIN].includes(authStore.user?.roles as Roles)"
           v-model="filterModel.value"
           @change="filterCallback()"
           :options="

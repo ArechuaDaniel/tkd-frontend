@@ -10,7 +10,7 @@ import { FilterMatchMode } from '@primevue/core/api';
 import { Button, Column, DataTable, DatePicker, Tag, Toast, useConfirm, useToast } from 'primevue';
 import InputText from 'primevue/inputtext';
 
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import Dropdown from 'primevue/dropdown';
 import { useRouter } from 'vue-router';
 import { triggerGetAllClubs, type Clubs } from '@/api/club';
@@ -31,27 +31,23 @@ import { number } from 'yup';
 import { RouteNames } from '@/domain/utils/route.util';
 import { useAuthStore } from '@/modules/auth/stores/auth.store';
 import { Roles } from '@/domain/entities/Roles';
+import { triggerGetUserById, triggerUserRemove, triggerUsuarioSave, type Usuario } from '@/api/users';
+import { triggerGetAllAsociaciones, type Asociacion } from '@/api/asociacion';
 
 const authStore = useAuthStore();
 
 const router = useRouter();
 
 // id del alumno
-const id: number | undefined = router.currentRoute.value.params.id as any;
+const idUsuario: number | undefined = router.currentRoute.value.params.id as any;
 const confirm = useConfirm();
 const toast = useToast();
 
+const loadedAsociaciones = ref<Asociacion[]>([]);
+const isLoadingASociaciones = ref(false);
+
 const loadedAlumnos = ref<Alumnos[]>([]);
 const isLoading = ref(false);
-
-const loadedProvincias = ref<Provincias[]>([]);
-const isLoadingProvincias = ref(false);
-
-const loadedCantones = ref<Cantones[]>([]);
-const isLoadingCantones = ref(false);
-
-const loadedParroquias = ref<Parroquias[]>([]);
-const isLoadingParroquias = ref(false);
 
 const loadedClubs = ref<Clubs[]>([]);
 const loadedSucursales = ref<Sucursals[]>([]);
@@ -60,16 +56,16 @@ const isLoadingSucursales = ref(false);
 
 const isCreating = ref(false);
 
-const alumnosModel = ref<Alumnos>({
-  id: 0,
+const usersModel = ref<Usuario>({
+  idUsuario: 0,
   idClub: 0,
   idSucursal: 0,
+  idAsociacion: 0,
   primerApellido: '',
   segundoApellido: '',
   primerNombre: '',
   segundoNombre: '',
-  cedulaAlumno: '',
-  fechaIngreso: undefined,
+  cedula: '',
   telefono: '',
   direccion: '',
   fechaNacimiento: undefined,
@@ -77,14 +73,16 @@ const alumnosModel = ref<Alumnos>({
   isActive: true,
   genero: '',
   tipoSangre: '',
-  ocupacion: '',
+  roles: '',
 });
 
 onMounted(async () => {
-  if (authStore.user?.roles === Roles.ASOCIACION) {
-		window.location.href = '/admin/dashboard'
-		return;
-	}
+  // if (authStore.user?.roles === Roles.INSTRUCTOR) {
+	// 	window.location.href = '/admin/dashboard'
+	// 	return;
+	// }
+
+  
   isLoading.value = true;
   loadedClubs.value = await triggerGetAllClubs();
   isLoading.value = false;
@@ -93,73 +91,66 @@ onMounted(async () => {
   reassembleModel();
   //queryProvincias();
 });
-// const queryProvincias = async () => {
-//   isLoadingProvincias.value = true;
-//   loadedProvincias.value = await triggerGetAllProvincias();
-//   isLoadingProvincias.value = false;
-// };
-// const queryCantones = async () => {
-//   isLoadingCantones.value = true;
-//   loadedCantones.value = await triggerGetAllCantones(Number(alumnosModel.value.idProvincia));
-//   isLoadingCantones.value = false;
-// };
-// const queryParroquias = async () => {
-//   isLoadingParroquias.value = true;
-//   loadedParroquias.value = await triggerGetAllParroquias(Number(alumnosModel.value.idCanton));
-//   isLoadingParroquias.value = false;
-// };
+const queryAsociaciones = async () => {
+  isLoadingASociaciones.value = true;
+  loadedAsociaciones.value = await triggerGetAllAsociaciones();
+  isLoadingASociaciones.value = false;
+
+}
 const querySucursals = async () => {
   isLoadingSucursales.value = true;
   loadedSucursales.value = await triggerGetAllSucursals();
   isLoadingSucursales.value = false;
 };
 const reassembleModel = async () => {
-  if (id) {
+  if (idUsuario) {
     isCreating.value = true;
-    const alumno = await triggerGetAlumnoById(id);
-    if (alumno) {
-      alumnosModel.value.id = alumno.id;
-      alumnosModel.value.cedulaAlumno = alumno.cedulaAlumno;
-      alumnosModel.value.fechaNacimiento = alumno.fechaNacimiento;
-      alumnosModel.value.primerApellido = alumno.primerApellido;
-      alumnosModel.value.segundoApellido = alumno.segundoApellido;
-      alumnosModel.value.primerNombre = alumno.primerNombre;
-      alumnosModel.value.segundoNombre = alumno.segundoNombre;
-      alumnosModel.value.telefono = alumno.telefono;
-      alumnosModel.value.genero = alumno.genero;
-      alumnosModel.value.email = alumno.email;
-      alumnosModel.value.fechaIngreso = alumno.fechaIngreso;
-      alumnosModel.value.direccion = alumno.direccion;
-      alumnosModel.value.tipoSangre = alumno.tipoSangre;
-      alumnosModel.value.ocupacion = alumno.ocupacion;
-      alumnosModel.value.isActive = alumno.isActive;
-      alumnosModel.value.idClub = alumno.idClub;
-      alumnosModel.value.idSucursal = alumno.idSucursal;
+    const users = await triggerGetUserById(idUsuario);
+    if (users) {
+      usersModel.value.idUsuario = users.idUsuario;
+      usersModel.value.cedula = users.cedula;
+      usersModel.value.fechaNacimiento = users.fechaNacimiento;
+      usersModel.value.primerApellido = users.primerApellido;
+      usersModel.value.segundoApellido = users.segundoApellido;
+      usersModel.value.primerNombre = users.primerNombre;
+      usersModel.value.segundoNombre = users.segundoNombre;
+      usersModel.value.telefono = users.telefono;
+      usersModel.value.genero = users.genero;
+      usersModel.value.email = users.email;
+      usersModel.value.fechaNacimiento = users.fechaNacimiento;
+      usersModel.value.direccion = users.direccion;
+      usersModel.value.tipoSangre = users.tipoSangre;
+      usersModel.value.isActive = users.isActive;
+      usersModel.value.idAsociacion = users.idAsociacion;
+      usersModel.value.idClub = users.idClub;
+      usersModel.value.idSucursal = users.idSucursal;
+      usersModel.value.roles = users.roles;
+      await queryAsociaciones();
       await querySucursals();
+      
     }
     isCreating.value = false;
   }
 };
 const startSaving = async () => {
   isCreating.value = true;
-  const result = await triggerAlumnosSave({
-    ...alumnosModel.value,
+  const result = await triggerUsuarioSave({
+    ...usersModel.value,
   });
-  console.log(result);
   isCreating.value = false;
   
   if (result) {
-    router.push({name: RouteNames.alumnosView});
+    router.push({name: RouteNames.userView});
   }
 };
 
 const startRemoving = async () => {
-  if (!id) return;
+  if (!idUsuario) return;
   //confirm2()
 
   confirm.require({
-    message: 'Desea eliminar el alumno?',
-    header: 'Eliminar Alumno',
+    message: 'Desea eliminar el usuario?',
+    header: 'Eliminar Usuario',
     icon: 'pi pi-info-circle',
     rejectLabel: 'Cancel',
     rejectProps: {
@@ -173,12 +164,12 @@ const startRemoving = async () => {
     },
     accept: async () => {
       isCreating.value = true;
-      const result = await triggerAlumnoRemove(id);
+      const result = await triggerUserRemove(idUsuario);
       if (result) {
         toast.add({
           severity: 'info',
           summary: 'Confirmed',
-          detail: 'Alumno eliminado',
+          detail: 'Usuario eliminado',
           life: 3000,
         });
       }
@@ -186,7 +177,7 @@ const startRemoving = async () => {
         toast.add({
           severity: 'error',
           summary: 'Rejected',
-          detail: 'No se pudo eliminar el alumno',
+          detail: 'No se pudo eliminar el Usuario',
           life: 3000,
         });
       }
@@ -209,25 +200,60 @@ const statusOptions = ref([
         { label: "Inactivo", value: false },
       
 ])
+const getRoles = () => {
+  if (authStore.user?.roles === Roles.ADMIN) {
+    return ['amdin', 'sucursal', 'instructor', 'club', 'asociacion'];
+  }
+  if (authStore.user?.roles === Roles.SUCURSAL) {
+    return ['instructor'];
+  }
+  if (authStore.user?.roles === Roles.ASOCIACION) {
+    return ['club'];
+  }
+
+  if (authStore.user?.roles === Roles.CLUB) {
+    return ['instructor, sucursal'];
+  }
+
+  return [];
+}
+// Opciones de roles basadas en el rol del usuario
+const rolesOptions = computed(() => {
+      const userRole = authStore?.user?.roles;
+
+      switch (userRole) {
+        case Roles.ADMIN:
+          return ["admin", "sucursal", "instructor", "club", "asociacion"];
+        case Roles.SUCURSAL:
+          return ["instructor"];
+        case Roles.ASOCIACION:
+          return ["club"];
+        case Roles.CLUB:
+          return ["instructor", "sucursal"];
+        default:
+          return [];
+      }
+    });
+  
 </script>
 <template>
   <Toast />
   <ConfirmDialog></ConfirmDialog>
   <div class="p-4 overflow-auto h-full w-full">
   <div class="flex md:flex-row flex-col justify-between items-center">
-    <h1 class="text-3xl font-bold">{{ id ? 'Editar' : 'Agregar' }} Alumno</h1>
+    <h1 class="text-3xl font-bold">{{ idUsuario ? 'Editar' : 'Agregar' }} Usuario</h1>
   </div>
   <div class="p-4">
     <form>
       <section class="flex flex-col text-sm gap-2 mt-2 bg-white w-full my-2 rounded-lg shadow">
         <section class="flex flex-row flex-wrap gap-2 justify-between">
           <div class="flex flex-col items-start">
-            <label for="cedulaAlumno" class="block text-gray-600">CedulaAlumno</label>
+            <label for="cedula" class="block text-gray-600">Cedula</label>
             <InputText
-              v-model="alumnosModel.cedulaAlumno"
+              v-model="usersModel.cedula"
               type="text"
-              id="cedulaAlumno"
-              name="cedulaAlumno"
+              id="cedula"
+              name="cedula"
               class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
               autocomplete="off"
             >
@@ -238,7 +264,7 @@ const statusOptions = ref([
           <div class="flex flex-col items-start">
             <label for="primerApellido" class="block text-gray-600">Primer Apellido</label>
             <InputText
-              v-model="alumnosModel.primerApellido"
+              v-model="usersModel.primerApellido"
               type="text"
               id="primerApellido"
               name="primerApellido"
@@ -249,7 +275,7 @@ const statusOptions = ref([
           <div class="flex flex-col items-start">
             <label for="segundoApellido" class="block text-gray-600">Segundo Apellido</label>
             <InputText
-              v-model="alumnosModel.segundoApellido"
+              v-model="usersModel.segundoApellido"
               type="text"
               id="segundoApellido"
               name="segundoApellido"
@@ -260,7 +286,7 @@ const statusOptions = ref([
           <div class="flex flex-col items-start">
             <label for="primerNombre" class="block text-gray-600">Primer Nombre</label>
             <InputText
-              v-model="alumnosModel.primerNombre"
+              v-model="usersModel.primerNombre"
               type="text"
               id="primerNombre"
               name="primerNombre"
@@ -271,7 +297,7 @@ const statusOptions = ref([
           <div class="flex flex-col items-start">
             <label for="segundoNombre" class="block text-gray-600">Segundo Nombre</label>
             <InputText
-              v-model="alumnosModel.segundoNombre"
+              v-model="usersModel.segundoNombre"
               type="text"
               id="segundoNombre"
               name="segundoNombre"
@@ -283,19 +309,19 @@ const statusOptions = ref([
           <div class="flex flex-col items-start">
             <label for="telefono" class="block text-gray-600">Teléfono</label>
             <InputText
-              v-model="alumnosModel.telefono"
+              v-model="usersModel.telefono"
               type="text"
               id="telefono"
               name="telefono"
               class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
               maxlength="10"
-              @input="alumnosModel.telefono = alumnosModel.telefono?.replace(/\D/g, '')"
+              @input="usersModel.telefono = usersModel.telefono?.replace(/\D/g, '')"
             />
           </div>
           <div class="flex flex-col items-start">
             <label for="genero" class="block text-gray-600">Genero</label>
             <Dropdown
-              v-model="alumnosModel.genero"
+              v-model="usersModel.genero"
               id="genero"
               name="genero"
               class="w-[13rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500 capitalize"
@@ -307,7 +333,7 @@ const statusOptions = ref([
           <div class="flex flex-col items-start">
             <label class="block text-gray-600" for="email">Correo</label>
             <InputText
-              v-model="alumnosModel.email"
+              v-model="usersModel.email"
               id="email"
               name="email"
               class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
@@ -325,7 +351,7 @@ const statusOptions = ref([
               :showOnFocus="false"
               inputId="buttondisplay"
               class="w-[13rem]"
-              v-model="alumnosModel.fechaNacimiento"
+              v-model="usersModel.fechaNacimiento"
             />
           </div>
           
@@ -335,7 +361,7 @@ const statusOptions = ref([
           <div class="flex flex-col items-start">
             <label class="block text-gray-600" for="Direccion">Dirección</label>
             <InputText
-              v-model="alumnosModel.direccion"
+              v-model="usersModel.direccion"
               id="direccion"
               name="direccion"
               class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
@@ -345,20 +371,11 @@ const statusOptions = ref([
           </div>
 
           <hr  class="h-[1px] w-full" />
-          <div class="flex flex-col items-start">
-            <label for="fechaIngreso" class="block text-gray-600">Fecha Ingreso</label>
-            <DatePicker
-              showIcon
-              fluid
-              :showOnFocus="false"
-              class="w-[13rem]"
-              v-model="alumnosModel.fechaIngreso"
-            />
-          </div>
+          
           <div class="flex flex-col items-start">
             <label for="tipoSangre" class="block text-gray-600">Tipo Sangre</label>
             <Dropdown
-              v-model="alumnosModel.tipoSangre"
+              v-model="usersModel.tipoSangre"
               id="tipoSangre"
               name="tipoSangre"
               class="w-[13rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500"
@@ -368,22 +385,31 @@ const statusOptions = ref([
             </Dropdown>
           </div>
           <div class="flex flex-col items-start">
-            <label class="block text-gray-600" for="ocupacion">Ocupación</label>
-            <Dropdown
-              v-model="alumnosModel.ocupacion"
-              id="ocupacion"
-              name="ocupacion" 
+            <label class="block text-gray-600" for="roles">Rol</label>
+            <InputText
+              disabled
+              v-if="usersModel.idUsuario"
+              v-model="usersModel.roles"
+              id="roles"
+              name="roles" 
               class="w-[13rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500 capitalize"
-              :options="['estudiante', 'trabaja', 'otro']"
+            ></InputText>
+            <Dropdown
+            v-if="!usersModel.idUsuario"
+              v-model="usersModel.roles"
+              id="roles"
+              name="roles" 
+              class="w-[13rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500 capitalize"
+              :options="rolesOptions"
               placeholder="Seleccione"
-            >
-            </Dropdown>
+            ></Dropdown>
+            
             <!-- <small class="text-red-800">{{ validator.idaprobador }}</small> -->
           </div>
           <div class="flex flex-col items-start">
             <label for="isActive" class="block text-gray-600">Active</label>
             <Dropdown
-              v-model="alumnosModel.isActive"
+              v-model="usersModel.isActive"
               ref="fullNameInputRef"
               type="text"
               id="isActive"
@@ -399,9 +425,24 @@ const statusOptions = ref([
         <section class="flex flex-row flex-wrap gap-2 justify-between">
           <hr style="border: 1px solid lightgray" class="h-[1px] w-full" />
           <div class="flex flex-col items-start">
+            <label for="isActive" class="block text-gray-600">Asociación</label>
+            <Dropdown
+              v-model="usersModel.idAsociacion"
+              ref="fullNameInputRef"
+              type="text"
+              id="idAsociacion"
+              name="idAsociacion"
+              class="w-[13rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500"
+              :options="loadedAsociaciones"
+              optionLabel="asociacion"
+              optionValue="idAsociacion"
+              placeholder="Seleccione"
+            />
+          </div>
+          <div class="flex flex-col items-start">
             <label for="idClub" class="block text-gray-600">Club</label>
             <Dropdown
-              v-model="alumnosModel.idClub"
+              v-model="usersModel.idClub"
               id="idClub"
               class="w-[13rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500"
               name="idClub"
@@ -413,10 +454,10 @@ const statusOptions = ref([
               @update:modelValue="querySucursals"
             />
           </div>
-          <div class="flex flex-col items-start">
+          <div class="flex flex-col items-start" v-if="[Roles.ADMIN, Roles.SUCURSAL, Roles.CLUB].includes(authStore.user?.roles as Roles,)">
             <label for="idSucursal" class="block text-gray-600">Sucursal</label>
             <Dropdown
-              v-model="alumnosModel.idSucursal"
+              v-model="usersModel.idSucursal"
               id="idSucursal"
               class="w-[13rem] border border-gray-300 rounded-md px-3 focus:outline-none focus:border-blue-500"
               name="idSucursal"
@@ -433,7 +474,7 @@ const statusOptions = ref([
     <div class="flex flex-row justify-end w-full h-full">
       <div class="flex md:flex-row flex-col justify-between md:w-1/2 w-full p-8">
         <button
-          v-if="alumnosModel.id"
+          v-if="usersModel.idUsuario"
           @click="startRemoving()"
           class="p-3 hover:bg-red-800 bg-red-500 rounded text-white flex items-center md:w-28"
         >

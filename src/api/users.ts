@@ -14,15 +14,17 @@ export interface Usuario {
   segundoApellido?: string,
   primerNombre: string,
   segundoNombre?: string,
-  fechaNacimiento?: Date,
+  fechaNacimiento?: Date | undefined,
   telefono?: string,
   genero?: string,
   tipoSangre?: string,
   isActive?: boolean,
   roles: string,
+  direccion?: string,
   idClub?: number,
   idSucursal?: number,
   idAsociacion?: number,
+
   clubs?: any,
   sucursals?: any,
   asociacions?: any
@@ -66,7 +68,7 @@ export const triggerGetUserById = async (
   )
   return output ?? []
 }
-export const triggerUsuarioave = async (usuario: Usuario): Promise<Usuario|null> => {
+export const triggerUsuarioSave = async (usuario: Usuario): Promise<Usuario|null> => {
 	const output = await makeRequest<any>(
 		`${VITE_APP_API_URL}/auth/register`,
 		'POST',

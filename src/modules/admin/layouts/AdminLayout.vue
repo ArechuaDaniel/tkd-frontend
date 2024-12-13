@@ -92,7 +92,7 @@ const settingOptions: Option[] = [
 		text: "Usuarios",
 		icon: "pi pi-user mr-2 ",
 		link: RouteNames.userView,
-		roles: [Roles.ADMIN,Roles.ASOCIACION, Roles.CLUB],
+		roles: [Roles.ADMIN,Roles.ASOCIACION, Roles.CLUB, Roles.SUCURSAL],
 	},
 ];
 const confirm = useConfirm();
