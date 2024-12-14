@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import {
-  triggerAlumnoRemove,
-  triggerAlumnosSave,
-  triggerGetAllAlumnos,
-  triggerGetAlumnoById,
-  type Alumnos,
-} from '@/api/alumno';
+
 import { FilterMatchMode } from '@primevue/core/api';
 import { Button, Column, DataTable, DatePicker, Tag, Toast, useConfirm, useToast } from 'primevue';
 import InputText from 'primevue/inputtext';
@@ -15,14 +9,7 @@ import Dropdown from 'primevue/dropdown';
 import { useRouter } from 'vue-router';
 import { triggerGetAllClubs, type Clubs } from '@/api/club';
 import { triggerGetAllSucursals, type Sucursals } from '@/api/sucursal';
-import {
-  triggerGetAllCantones,
-  triggerGetAllParroquias,
-  triggerGetAllProvincias,
-  type Cantones,
-  type Parroquias,
-  type Provincias,
-} from '@/api/ubicacion';
+
 
 import ConfirmDialog from 'primevue/confirmdialog';
 
@@ -46,7 +33,7 @@ const toast = useToast();
 const loadedAsociaciones = ref<Asociacion[]>([]);
 const isLoadingASociaciones = ref(false);
 
-const loadedAlumnos = ref<Alumnos[]>([]);
+
 const isLoading = ref(false);
 
 const loadedClubs = ref<Clubs[]>([]);

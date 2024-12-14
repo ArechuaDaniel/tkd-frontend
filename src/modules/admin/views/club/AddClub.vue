@@ -13,7 +13,6 @@ import { triggerAsociacionRemove, triggerAsociacionSave, triggerGetAllAsociacion
 import { triggerClubRemove, triggerClubSave, triggerGetClubById, type Clubs } from '@/api/club';
 import { Roles } from '@/domain/entities/Roles';
 import { useAuthStore } from '@/modules/auth/stores/auth.store';
-import { u } from 'node_modules/@tanstack/vue-query/build/modern/queryClient-C5JH3kKW';
 
 const authStore = useAuthStore()
 const router = useRouter();
