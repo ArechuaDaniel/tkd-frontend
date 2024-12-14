@@ -512,7 +512,6 @@ const rolesOptions = computed(() => {
               placeholder="Seleccione"
             />
           </div>
-          {{ usersModel }}
         </section>
       </section>
     </form>

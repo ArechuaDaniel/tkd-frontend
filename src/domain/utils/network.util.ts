@@ -48,7 +48,7 @@ export const makeRequest = async <T>(url: string, method: string = 'GET', body?:
 	if (response.status >= 500) {
 		VsToast.show({
 			title: 'Hubo un error en el servidor',
-			message: json.error ?? 'Contacte con TI.',
+			message: json.error ? 'Contacte con TI.' : 'Hubo un error',
 			variant: 'error',
 		});
 

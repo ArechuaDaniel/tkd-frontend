@@ -10,11 +10,8 @@ import { useRouter } from 'vue-router';
 import { triggerGetAllClubs, type Clubs } from '@/api/club';
 import { triggerGetAllSucursals, type Sucursals } from '@/api/sucursal';
 
-
 import ConfirmDialog from 'primevue/confirmdialog';
 
-//import VsToast from '@vuesimple/vs-toast'
-import { number } from 'yup';
 import { RouteNames } from '@/domain/utils/route.util';
 import { useAuthStore } from '@/modules/auth/stores/auth.store';
 import { Roles } from '@/domain/entities/Roles';
@@ -32,7 +29,6 @@ const toast = useToast();
 
 const loadedAsociaciones = ref<Asociacion[]>([]);
 const isLoadingASociaciones = ref(false);
-
 
 const isLoading = ref(false);
 
@@ -60,7 +56,6 @@ const usersModel = ref<Usuario>({
   genero: '',
   tipoSangre: '',
   roles: '',
-  
 });
 
 onMounted(async () => {
@@ -77,6 +72,7 @@ onMounted(async () => {
   //querySucursals();
   queryAsociaciones();
   reassembleModel();
+  querySucursals();
   //queryProvincias();
 });
 const queryAsociaciones = async () => {
@@ -114,7 +110,6 @@ const reassembleModel = async () => {
       usersModel.value.idSucursal = users.idSucursal;
       usersModel.value.roles = users.roles;
      //await queryAsociaciones();
-      await querySucursals();
       
     }
     isCreating.value = false;
@@ -122,11 +117,10 @@ const reassembleModel = async () => {
 };
 const startSaving = async () => {
   isCreating.value = true;
-
+  
   const result = await triggerUsuarioSave({
     ...usersModel.value,
   });
-  
   isCreating.value = false;
   
   if (result) {
@@ -231,7 +225,7 @@ const rolesOptions = computed(() => {
   <ConfirmDialog></ConfirmDialog>
   <div class="p-4 overflow-auto h-full w-full">
   <div class="flex md:flex-row flex-col justify-between items-center">
-    <h1 class="text-3xl font-bold">Editar Usuario .</h1>
+    <h1 class="text-3xl font-bold">Agregar Usuario</h1>
   </div>
   <div class="p-4">
     <form>
@@ -361,7 +355,7 @@ const rolesOptions = computed(() => {
             </InputText>
             <!-- <small class="text-red-800">{{ validator.idaprobador }}</small> -->
           </div>
-     
+          
 
           <hr  class="h-[1px] w-full" />
           

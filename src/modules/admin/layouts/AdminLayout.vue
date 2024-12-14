@@ -119,11 +119,11 @@ const cerrarSesion = async () => {
     },
     accept: async () => {
       isLoading.value = true;
-      toast.add({
+      await toast.add({
           severity: 'info',
           summary: 'Confirmed',
           detail: 'Se ha cerrado la sesión',
-          life: 3000,
+          life: 5000,
         });
         isLoading.value = false;
         authStore.logout(), 

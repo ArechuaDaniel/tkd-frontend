@@ -7,7 +7,6 @@ import type { Sucursals } from "./sucursal";
 const { VITE_APP_API_URL } = import.meta.env
 
 export interface Usuario {
-  password?: string | undefined,
   idUsuario: number,
   email: string,
   cedula: string,
@@ -25,10 +24,11 @@ export interface Usuario {
   idClub?: number,
   idSucursal?: number,
   idAsociacion?: number,
-
+  
   clubs?: any,
   sucursals?: any,
   asociacions?: any
+  password?: string,
 }
 
 // export const triggerGetAllAlumnos = async (
